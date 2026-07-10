@@ -41,12 +41,14 @@ Part of `tooling-1.0-readiness-2026-07-10` wave (priority 1: Toolchain Core).
 
 See docs/ROADMAP.md and CHANGELOG.md .
 
-**Current versions:** workspace crates at 0.0.0 baseline; the `tero` crate (formerly
-`mycelium-tero`; the shipped fronts `tero-index`/`tero-http`/`tero-mcp`/`tero-eval`) at **0.1.2**,
-released as `v0.1.2` (git tag + `gh release` + GHCR `ghcr.io/tzervas/tero-rs:0.1.2`). The 0.1.2 bump
-reflects the public crate rename `mycelium-tero` → `tero`; binary behavior is unchanged from 0.1.1.
-1.0.0 is not yet justified — see docs/ROADMAP.md for the remaining criteria (full-workspace clippy
-clean, cabal positive assess, hardened fronts).
+**Current versions:** the `tero` crate (formerly `mycelium-tero`; the shipped fronts
+`tero-index`/`tero-http`/`tero-mcp`/`tero-eval`) at **0.1.2**; the 16 vendored `mycelium-*`
+dependency crates remain at 0.0.0. The 0.1.2 bump reflects the public crate rename `mycelium-tero`
+→ `tero` plus the clean-extraction strip (40 non-dependency `mycelium-*` crates removed; workspace
+57 → 17 crates); binary behavior is unchanged from 0.1.1. The `v0.1.2` git tag is on `origin`; the
+GitHub Release and GHCR image for 0.1.2 are pending explicit maintainer authorization. 1.0.0 is not
+yet justified — see docs/ROADMAP.md (hardened fronts, cabal positive assess, and the
+vendored-vs-published dependency decision).
 
 License: MIT (per workspace).
 

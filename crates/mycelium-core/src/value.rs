@@ -217,10 +217,7 @@ impl<'de> Deserialize<'de> for Payload {
                         ))),
                     }
                 };
-                // WHAT: Replaced chunks_exact(2) with as_chunks::<2>() to satisfy clippy chunks_exact_to_as_chunks (under -D warnings in check.sh).
-                // WHY: hygiene gate (1.0 readiness) requires clean clippy; as_chunks is the modern const-generic equiv for known size 2, produces same &[u8;2] slices.
-                // WHY NOT other: allow(lint) would hide; manual loop less idiomatic; chunks_exact kept only if non-const size needed (not here).
-                for pair in raw.as_chunks::<2>().0 {
+                for pair in raw.chunks_exact(2) {
                     bytes.push((hex_val(pair[0])? << 4) | hex_val(pair[1])?);
                 }
                 Payload::Bytes(bytes)

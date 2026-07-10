@@ -3,7 +3,7 @@
 > **Honesty:** Empirical/Declared — lite heading/line heuristic over markdown in tero-rs via tero-mcp/scripts/generate_lite_index.py; source files are ground truth. Generated 2026-07-10.
 > Use this index to find where to Read, not as authoritative ground truth.
 
-- **Items:** 32
+- **Items:** 34
 - **Flagged:** 0
 - **item_tag:** `Empirical/Declared`
 - **Machine index:** [`index.json`](./index.json)
@@ -34,7 +34,7 @@
 | `roadmap--waves-steps-for-toolchain-p1` | section | — | Waves / Steps for Toolchain P1 | `docs/ROADMAP.md:22` | — | - Hygiene + branch guard (done this tranche). |
 | `roadmap--relation-to-siblings` | section | — | Relation to siblings | `docs/ROADMAP.md:30` | — | - tero-mcp: Python lite + packaging over the Rust tero-mcp bin. See its ROADMAP for MCP surface stability. |
 
-## changelog (12 entries)
+## changelog (14 entries)
 
 | Anchor | Kind | Id | Title | File:Line | Status | Summary |
 |---|---|---|---|---|---|---|
@@ -42,12 +42,14 @@
 | `changelog--unreleased` | section | — | [Unreleased] | `CHANGELOG.md:8` | — | - Renamed the public crate mycelium-tero → tero (and the directory crates/mycelium-tero |
 | `changelog--0.1.2-2026-07-10` | section | — | [0.1.2] - 2026-07-10 | `CHANGELOG.md:10` | — | - Renamed the public crate mycelium-tero → tero (and the directory crates/mycelium-tero |
 | `changelog--changed-rebrand-public-crate-rename` | section | — | Changed (rebrand — public crate rename) | `CHANGELOG.md:12` | — | - Renamed the public crate mycelium-tero → tero (and the directory crates/mycelium-tero |
-| `changelog--verified` | section | — | Verified | `CHANGELOG.md:33` | — | - cargo build --release -p tero green; cargo test -p tero --release green; cargo clippy -p tero |
-| `changelog--0.1.1-2026-07-10` | section | — | [0.1.1] - 2026-07-10 | `CHANGELOG.md:42` | — | - Real gate run (not claimed): cargo build --release -p mycelium-tero green; |
-| `changelog--verified-stable-published` | section | — | Verified stable + published | `CHANGELOG.md:44` | — | - Real gate run (not claimed): cargo build --release -p mycelium-tero green; |
-| `changelog--0.1.0-2026-07-10` | section | — | [0.1.0] - 2026-07-10 | `CHANGELOG.md:63` | — | - scripts/check.sh (targeted cargo fmt/clippy/check/test on mycelium-tero; --fix/--quick support). WHAT: hygiene gate matching sibling projects. WHY: wave requ… |
-| `changelog--added-for-1.0-readiness` | section | — | Added (for 1.0 readiness) | `CHANGELOG.md:65` | — | - scripts/check.sh (targeted cargo fmt/clippy/check/test on mycelium-tero; --fix/--quick support). WHAT: hygiene gate matching sibling projects. WHY: wave requ… |
-| `changelog--changed` | section | — | Changed | `CHANGELOG.md:71` | — | - Ran ./scripts/check.sh --fix: applied fmt (line wraps, import order in mycelium-tero/src/{bin/tero-mcp.rs, front/mcp.rs, lib.rs}). WHAT: clean hygiene run. W… |
-| `changelog--cited` | section | — | Cited | `CHANGELOG.md:76` | — | - Tero-first actions: /root/git/scripts/tero.sh tero-mcp/cabal-devmelopner/dev-docs identify + textsearch for "tero semver 1.0 readiness tooling cabal", "chore… |
-| `changelog--verification` | section | — | Verification | `CHANGELOG.md:82` | — | - Hygiene: check.sh green (fmt fixed, tests ok). |
+| `changelog--removed-clean-extraction-vendored-language-crate-residue` | section | — | Removed (clean extraction — vendored language-crate residue) | `CHANGELOG.md:31` | — | - tero-rs was extracted from the Mycelium monorepo (where tero/mycelium-tero was built as a |
+| `changelog--flag-for-maintainer-decision-vendored-genuine-dependencies` | section | — | FLAG (for maintainer decision — vendored genuine dependencies) | `CHANGELOG.md:47` | — | - tero still vendors 16 mycelium- crates that are its genuine (transitive) dependencies: |
+| `changelog--verified` | section | — | Verified | `CHANGELOG.md:58` | — | - cargo build --release -p tero green; cargo test -p tero --release 113 passed; cargo clippy |
+| `changelog--0.1.1-2026-07-10` | section | — | [0.1.1] - 2026-07-10 | `CHANGELOG.md:65` | — | - Real gate run (not claimed): cargo build --release -p mycelium-tero green; |
+| `changelog--verified-stable-published` | section | — | Verified stable + published | `CHANGELOG.md:67` | — | - Real gate run (not claimed): cargo build --release -p mycelium-tero green; |
+| `changelog--0.1.0-2026-07-10` | section | — | [0.1.0] - 2026-07-10 | `CHANGELOG.md:86` | — | - scripts/check.sh (targeted cargo fmt/clippy/check/test on mycelium-tero; --fix/--quick support). WHAT: hygiene gate matching sibling projects. WHY: wave requ… |
+| `changelog--added-for-1.0-readiness` | section | — | Added (for 1.0 readiness) | `CHANGELOG.md:88` | — | - scripts/check.sh (targeted cargo fmt/clippy/check/test on mycelium-tero; --fix/--quick support). WHAT: hygiene gate matching sibling projects. WHY: wave requ… |
+| `changelog--changed` | section | — | Changed | `CHANGELOG.md:94` | — | - Ran ./scripts/check.sh --fix: applied fmt (line wraps, import order in mycelium-tero/src/{bin/tero-mcp.rs, front/mcp.rs, lib.rs}). WHAT: clean hygiene run. W… |
+| `changelog--cited` | section | — | Cited | `CHANGELOG.md:99` | — | - Tero-first actions: /root/git/scripts/tero.sh tero-mcp/cabal-devmelopner/dev-docs identify + textsearch for "tero semver 1.0 readiness tooling cabal", "chore… |
+| `changelog--verification` | section | — | Verification | `CHANGELOG.md:105` | — | - Hygiene: check.sh green (fmt fixed, tests ok). |
 

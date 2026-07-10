@@ -25,19 +25,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   relevant citations. (The crate `description` already carried a homage line; the README now states
   it plainly.)
 - Removed a stray tracked `Cargo.toml.bak` backup (cruft).
-- Test suite: added targeted regression + e2e tests during the same polish pass — parameterized
-  hex byte-decode regression (mycelium-core, the `as_chunks` fix), parameterized seq-literal length
-  regression (mycelium-l1, the `unwrap_or` fix), and a real-committed-index end-to-end test (`tero`:
-  every citation's `file:line` resolves on disk, with engine/HTTP/MCP parity on real data).
+- Added a real-committed-index end-to-end test to the `tero` crate: every citation's `file:line`
+  resolves on disk, with engine/HTTP/MCP parity on real data (`src/tests/front_live_corpus.rs`).
+
+### Removed (clean extraction — vendored language-crate residue)
+- `tero-rs` was extracted from the Mycelium monorepo (where `tero`/`mycelium-tero` was built as a
+  context/indexing dev tool) and carried the **entire** `mycelium-*` language workspace along as
+  extraction residue. This release strips the residue: **removed 40 vendored `mycelium-*` crates**
+  that are **not** in `tero`'s dependency closure (the `mycelium-std-*` family, `mycelium-cli`/
+  `-lsp`/`-fmt`/`-lint`/`-check`/`-sec`/`-spore`/`-bench`/`-build`/`-diag`/`-transpile`/
+  `-vsa-decode`, etc.). The workspace went from 57 crates to **17**. This is verified-safe: the
+  removed set is manifest-closed — no remaining crate references any removed crate (checked via a
+  path-dependency closure analysis + a green `cargo build/test -p tero` after removal). A welcome
+  side effect: the workspace-wide clippy noise from the `mycelium-std-cmp` stub is gone with it.
+- **Reverted** two out-of-scope edits that had been made to language crates (`mycelium-core`
+  `chunks_exact`→`as_chunks`; `mycelium-l1` `map_or`→`unwrap_or`) and the tests added around them —
+  the `mycelium-*` language crates are a **separate project**, vendored read-only here, and are not
+  `tero-rs`'s to modify. Gates are now scoped to `tero` (`-p tero`, `clippy --no-deps`), not the
+  whole workspace.
+
+### FLAG (for maintainer decision — vendored genuine dependencies)
+- `tero` still **vendors 16 `mycelium-*` crates** that are its genuine (transitive) dependencies:
+  direct path-deps `mycelium-doc` + `mycelium-vsa`, pulling in `mycelium-core`, `-l1`, `-proj`,
+  `-cert`, `-interp`, `-select`, `-numerics`, `-sched`, `-dense`, `-stack`, `-workstack`, plus
+  `-mlir`/`-mir-passes`/`-rt-abi` (kept only because `mycelium-l1` has a **dev-dependency** on
+  `mycelium-mlir` — `tero` does not build them, but they must remain workspace members for
+  `mycelium-l1`'s manifest to resolve). These are vendored copies of a separately-maintained
+  project; a future change should decide whether `tero` depends on the **published** mycelium
+  crates instead of vendoring them (and whether `mycelium-l1`'s FFI-JIT `mycelium-mlir` dev-dep can
+  be broken to drop the last 3). Not actioned here — flagged.
 
 ### Verified
-- `cargo build --release -p tero` green; `cargo test -p tero --release` green; `cargo clippy -p tero
-  --all-targets -- -D warnings` clean. `cargo build --release --workspace` green. (The unrelated
-  full-workspace `cargo clippy --workspace -- -D warnings` finding in the 0.0.0 stub crate
-  `mycelium-std-cmp` — outside `tero`'s dependency graph — remains, and is why this is 0.1.2, not
-  1.0.0.) Note: `mycelium-l1`'s own test *suite* cannot run in this extraction (`include_str!` of
-  `lib/*.myc` fixtures that were not copied over) — a pre-existing extraction gap, independent of
-  the rename; the `tero` product and its dependency *libraries* build and test green.
+- `cargo build --release -p tero` green; `cargo test -p tero --release` **113 passed**; `cargo clippy
+  -p tero --all-targets --no-deps -- -D warnings` clean; the four tero binaries build. `cargo build
+  --release --workspace` (now 17 crates) green. 1.0.0 remains gated on the broader readiness criteria
+  (ROADMAP): hardened fronts, cabal positive assess, and a decision on the vendored-vs-published
+  dependency question above.
 
 ## [0.1.1] - 2026-07-10
 

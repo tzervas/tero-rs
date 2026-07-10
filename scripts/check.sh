@@ -17,12 +17,14 @@ cd "$(dirname "$0")/.."
 MODE="${1:-}"
 if command -v cargo >/dev/null 2>&1; then
   echo "=== tero-rs cargo fmt/clippy/check (targeted) ==="
-  cargo fmt -- --check || (echo "fmt issues"; [[ "$MODE" == "--fix" ]] && cargo fmt)
-  cargo clippy --workspace -- -D warnings || echo "WARN: clippy warnings (review for 1.0 hardening)"
-  # Target tero-relevant (history: tero bin or specific crates for the extracted tero functionality)
-  cargo check -p tero 2>/dev/null || cargo check --workspace --message-format short | head -20
+  # Scope: TERO only. The remaining mycelium-* crates are vendored, read-only dependencies of the
+  # tero crate (a separate language project) — they are NOT tero's to lint/gate. `--no-deps` lints
+  # only the tero package; `-p tero` builds/tests only tero (+ its bins). Do NOT re-add --workspace.
+  cargo fmt -p tero -- --check || (echo "fmt issues"; [[ "$MODE" == "--fix" ]] && cargo fmt -p tero)
+  cargo clippy -p tero --all-targets --no-deps -- -D warnings || echo "WARN: tero clippy warnings (review for 1.0 hardening)"
+  cargo check -p tero || echo "WARN: tero check failed"
   if [[ "$MODE" != "--quick" ]]; then
-    cargo test -p tero -- --quiet 2>/dev/null || echo "INFO: no dedicated tero tests or skipped in this extraction view"
+    cargo test -p tero -- --quiet || echo "INFO: tero tests failed or skipped"
   fi
 else
   echo "cargo not found; skipping Rust checks"

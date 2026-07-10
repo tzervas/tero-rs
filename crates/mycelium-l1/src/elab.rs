@@ -1190,10 +1190,7 @@ impl Elab<'_> {
                     );
                 };
                 let elem = first.repr().clone();
-                // WHAT: map_or(u32::MAX, |n| n) -> unwrap_or(u32::MAX) to fix clippy map_or_identity under -D warnings.
-                // WHY: hygiene (check.sh clippy gate for 1.0); unwrap_or is clearer and recommended here (identity transform on Some).
-                // WHY NOT: allow() would suppress (violates clean for release); map_or kept only for non-identity.
-                let len = u32::try_from(vals.len()).unwrap_or(u32::MAX);
+                let len = u32::try_from(vals.len()).map_or(u32::MAX, |n| n);
                 Value::new(
                     Repr::Seq {
                         elem: Box::new(elem),
