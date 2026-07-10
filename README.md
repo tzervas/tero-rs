@@ -32,7 +32,11 @@ Part of `tooling-1.0-readiness-2026-07-10` wave (priority 1: Toolchain Core).
 
 See docs/ROADMAP.md and CHANGELOG.md .
 
-**Current versions:** workspace crates at 0.0.0 baseline; key fronts (mycelium-tero) targeted for 0.1.0+ path documented.
+**Current versions:** workspace crates at 0.0.0 baseline; `mycelium-tero` (the shipped tero fronts:
+`tero-index`/`tero-http`/`tero-mcp`/`tero-eval`) at **0.1.1**, released as `v0.1.1` (git tag +
+`gh release` + GHCR `ghcr.io/tzervas/tero-rs:0.1.1`). 1.0.0 is not yet justified — see
+docs/ROADMAP.md for the remaining criteria (full-workspace clippy clean, cabal positive assess,
+hardened fronts).
 
 License: MIT (per workspace).
 

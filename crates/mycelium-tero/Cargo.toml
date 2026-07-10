@@ -1,9 +1,20 @@
 [package]
 name = "mycelium-tero"
-# WHAT: version 0.0.0 -> 0.1.0 bump for tero-facing crate.
-# WHY: per tooling-1.0-readiness-2026-07-10 wave (P1 tero-rs semver review + "bump toward 1.0 or document"); aligns with 0.1.0 baseline from chore/semver-baseline-v0.1.0 commit and python siblings (tero-mcp/cabal now 0.1.1). Establishes "initial stable supporting tooling release candidate path".
-# WHY NOT 1.0.0: tero-rs/mycelium-tero is kernel for extracted toolchain (not standalone product); full 1.0 requires wave criteria (green checks across, cabal positive cited assess, hardened fronts, release artifacts, VSA notes in ROADMAP). Other internal crates stay 0.0.0. C0-honest.
-version = "0.1.0"
+# WHAT: version 0.0.0 -> 0.1.0 -> 0.1.1 for the tero-facing crate (this publish pass).
+# WHY: 0.1.0 aligned the extracted crate with the chore/semver-baseline-v0.1.0 repo tag. This pass
+# (verified: cargo build --release -p mycelium-tero green, cargo test -p mycelium-tero 112/112
+# green, cargo clippy -p mycelium-tero --all-targets -D warnings clean) is fixes-only relative to
+# that baseline — hygiene (scripts/check.sh, git-secrets), two clippy-driven bugfixes in
+# mycelium-core/mycelium-l1 (dependencies of this crate), docs/tero-index bootstrap — no API or
+# behavior change to the shipped bins (tero-index/tero-http/tero-mcp/tero-eval). Semver: patch.
+# Also brings tero-rs to parity with the python siblings (tero-mcp/cabal already at 0.1.1).
+# WHY NOT 1.0.0: tero-rs/mycelium-tero is kernel for extracted toolchain (not standalone product);
+# full 1.0 requires wave criteria not yet met (green checks ACROSS the whole workspace — a
+# workspace-wide `cargo clippy --workspace -D warnings` still fails in an unrelated 0.0.0 stub crate,
+# mycelium-std-cmp, outside this crate's dependency tree; a nightly-toolchain unstable_name_collisions
+# lint, not a real defect, but still unresolved), cabal positive cited assess, hardened fronts,
+# release artifacts, VSA notes in ROADMAP. Other internal crates stay 0.0.0. C0-honest.
+version = "0.1.1"
 description = "mycelium-tero — the transparent memory substrate & agent knowledge API (DN-87 / E39-1): the corpus as a generated, provenance-carrying encoding (deterministic structured index + a VSA semantic layer), served platform-agnostically. Named in quiet homage to Atsushi Tero, for his contribution to science and engineering."
 edition.workspace = true
 rust-version.workspace = true

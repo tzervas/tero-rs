@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-10
+
+### Verified stable + published
+- Real gate run (not claimed): `cargo build --release -p mycelium-tero` green;
+  `cargo test -p mycelium-tero --release` 112/112 passed; `cargo clippy -p mycelium-tero
+  --all-targets -- -D warnings` clean. `cargo build --release --workspace` also green (all ~55
+  crates compile). `cargo clippy --workspace --all-targets -- -D warnings` (the full-workspace,
+  not just tero-facing, gate) still fails on one unrelated finding in `mycelium-std-cmp` (a 0.0.0
+  internal stub crate NOT in `mycelium-tero`'s dependency graph): a nightly-only
+  `unstable_name_collisions` lint on a `widen()` method name that may collide with a future std
+  API. Not a defect in the shipped surface, but it is why this is 0.1.1, not 1.0.0 (ROADMAP's own
+  1.0 criteria require green checks ACROSS the workspace).
+- Bumped `mycelium-tero` 0.1.0 -> 0.1.1 (patch: fixes/hygiene only, no API/behavior change to the
+  shipped bins). Brings tero-rs to parity with the python siblings (tero-mcp/cabal already 0.1.1).
+- Published: annotated tag `v0.1.1` on `origin`, `gh release create v0.1.1` with the built
+  `tero-mcp` release binary attached as an asset, plus a GHCR container image
+  `ghcr.io/tzervas/tero-rs` tagged `0.1.1`/`0.1`/`0`/`latest`. See the release page + package
+  registry for the verification evidence (git ls-remote / gh release view / GHCR API), not this
+  changelog entry alone (VR-5: this paragraph is itself `Declared` until cross-checked against
+  those primary sources at publish time).
+
 ## [0.1.0] - 2026-07-10
 
 ### Added (for 1.0 readiness)
@@ -31,7 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tero index now >0 after md adds.
 - All changes on feature/1.0-readiness; append-only docs.
 
-[0.1.0]: https://example (no tag yet)
+[0.1.1]: https://github.com/tzervas/tero-rs/releases/tag/v0.1.1
+[0.1.0]: https://github.com/tzervas/tero-rs/releases/tag/v0.1.0
 
 ---
 
