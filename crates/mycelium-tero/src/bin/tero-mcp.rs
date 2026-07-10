@@ -78,5 +78,6 @@ fn run(args: &[String]) -> Result<u8, (u8, String)> {
 }
 
 fn usage() -> String {
-    "usage: TERO_TOKENS='<token>:<read|refresh> ...' tero-mcp [--index <index.json>] [--describe]".to_owned()
+    "usage: TERO_TOKENS='<token>:<read|refresh> ...' tero-mcp [--index <index.json>] [--describe]"
+        .to_owned()
 }

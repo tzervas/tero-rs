@@ -1,6 +1,9 @@
 [package]
 name = "mycelium-tero"
-version = "0.0.0"
+# WHAT: version 0.0.0 -> 0.1.0 bump for tero-facing crate.
+# WHY: per tooling-1.0-readiness-2026-07-10 wave (P1 tero-rs semver review + "bump toward 1.0 or document"); aligns with 0.1.0 baseline from chore/semver-baseline-v0.1.0 commit and python siblings (tero-mcp/cabal now 0.1.1). Establishes "initial stable supporting tooling release candidate path".
+# WHY NOT 1.0.0: tero-rs/mycelium-tero is kernel for extracted toolchain (not standalone product); full 1.0 requires wave criteria (green checks across, cabal positive cited assess, hardened fronts, release artifacts, VSA notes in ROADMAP). Other internal crates stay 0.0.0. C0-honest.
+version = "0.1.0"
 description = "mycelium-tero — the transparent memory substrate & agent knowledge API (DN-87 / E39-1): the corpus as a generated, provenance-carrying encoding (deterministic structured index + a VSA semantic layer), served platform-agnostically. Named in quiet homage to Atsushi Tero, for his contribution to science and engineering."
 edition.workspace = true
 rust-version.workspace = true

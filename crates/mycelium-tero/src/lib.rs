@@ -73,8 +73,8 @@ pub use query::{Answer, Citation, Explain, Query, QueryEngine, RankedHit, Refusa
 // fronts (`front::core`); the auth allow-list + the HTTP server type a binary needs to construct.
 pub use front::auth::{AuthError, Scope, TokenTable, TokenTableError};
 pub use front::http::{serve_http, AppState};
-pub use front::mcp::{serve_mcp_stdio, tool_descriptors};
 pub use front::mcp::SERVER_NAME;
+pub use front::mcp::{serve_mcp_stdio, tool_descriptors};
 
 // M-1018 — Layer 2 (the VSA semantic layer) + the Empirical eval gate. The public surface is
 // deliberately minimal (KC-3): the Layer-2 index/answer/refusal/explain a consumer reads, plus the

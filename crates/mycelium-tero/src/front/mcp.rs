@@ -361,7 +361,13 @@ pub fn tool_descriptors() -> Value {
 }
 
 /// One tool descriptor.
-fn tool(name: &str, description: &str, properties: Value, required: &[&str], category: &str) -> Value {
+fn tool(
+    name: &str,
+    description: &str,
+    properties: Value,
+    required: &[&str],
+    category: &str,
+) -> Value {
     json!({
         "name": name,
         "description": description,
