@@ -13,6 +13,7 @@ mod flagged;
 mod front_auth;
 mod front_core;
 mod front_http;
+mod front_live_corpus;
 mod front_mcp;
 mod front_parity;
 mod front_smoke;
