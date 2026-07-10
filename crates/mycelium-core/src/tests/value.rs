@@ -397,6 +397,80 @@ fn bytes_content_hash_distinguishes_and_collides() {
     assert_ne!(mk(vec![1]).content_hash(), as_binary.content_hash());
 }
 
+/// FIXTURE: decode a lowercase-hex wire string through the real `Deserialize for Payload` path
+/// (the `PayloadWire::Bytes` arm, `crate::value` around L199-227) by round-tripping the exact JSON
+/// wire shape used by `bytes_json_round_trips_and_rejects_bad_hex`. Panics (via `expect`) on a
+/// decode error — callers that want to assert rejection use `try_decode_bytes_hex` instead.
+fn decode_bytes_hex(hex: &str) -> Vec<u8> {
+    try_decode_bytes_hex(hex).expect("hex expected to decode")
+}
+
+/// FIXTURE: same wire round-trip as [`decode_bytes_hex`], but returns the `serde_json::Result` so
+/// rejection cases can assert `Err` without a panic.
+fn try_decode_bytes_hex(hex: &str) -> serde_json::Result<Vec<u8>> {
+    let json = format!(
+        r#"{{"repr":{{"kind":"Bytes"}},"payload":{{"bytes":"{hex}"}},
+             "meta":{{"provenance":{{"kind":"Root"}},"guarantee":"Exact"}}}}"#
+    );
+    let v: Value = serde_json::from_str(&json)?;
+    Ok(v.bytes()
+        .expect("Bytes repr decodes to Payload::Bytes")
+        .to_vec())
+}
+
+/// Regression pin for the `chunks_exact(2)` -> `as_chunks::<2>().0` clippy fix in the
+/// `PayloadWire::Bytes` deserialize arm (`crate::value`, ~L223): the byte-decode loop must still
+/// treat `pair[0]` as the HIGH nibble and `pair[1]` as the LOW nibble, decode multi-byte strings in
+/// left-to-right order, and handle the empty string and odd byte-counts (1, 3 bytes) correctly.
+/// `Empirical` — verified by execution, not proof.
+#[test]
+fn bytes_hex_decode_pins_nibble_order_and_boundary_lengths() {
+    let cases: &[(&str, &[u8])] = &[
+        // Empty input decodes to an empty byte string.
+        ("", &[]),
+        // Full nibble range, both nibble positions, on a single byte.
+        ("00", &[0x00]),
+        ("ff", &[0xff]),
+        ("0f", &[0x0f]),
+        ("f0", &[0xf0]),
+        // `pair[0]` is the HIGH nibble, `pair[1]` is the LOW nibble — "0a" and "a0" must differ.
+        ("0a", &[0x0a]),
+        ("a0", &[0xa0]),
+        // Boundary lengths: 1 byte, 3 bytes (odd byte *count*, even hex-digit count).
+        ("ab", &[0xab]),
+        ("aabbcc", &[0xaa, 0xbb, 0xcc]),
+        // Multi-byte decode preserves left-to-right byte order across an `as_chunks::<2>()` split.
+        ("deadbeef", &[0xde, 0xad, 0xbe, 0xef]),
+        ("0102030405", &[0x01, 0x02, 0x03, 0x04, 0x05]),
+    ];
+    for (hex, expected) in cases {
+        assert_eq!(
+            decode_bytes_hex(hex),
+            *expected,
+            "hex {hex:?} must decode to {expected:?}"
+        );
+    }
+}
+
+/// Regression pin: the odd-length guard (`crate::value` ~L202) plus the `as_chunks::<2>()` split
+/// (~L223) must never silently drop a trailing nibble or coerce a non-hex character — both classes
+/// stay a hard `Err` (G2, never-silent). `Empirical` — verified by execution.
+#[test]
+fn bytes_hex_decode_rejects_odd_length_and_non_hex_never_silently() {
+    let rejected: &[&str] = &[
+        // Odd hex-digit counts (would leave a dangling nibble if silently truncated).
+        "a", "abc", "12345",
+        // Non-hex characters, including uppercase (wire form is lowercase-only) and boundary chars.
+        "zz", "g0", "0g", "AB", "0x", " a",
+    ];
+    for hex in rejected {
+        assert!(
+            try_decode_bytes_hex(hex).is_err(),
+            "hex {hex:?} must be rejected, never silently coerced"
+        );
+    }
+}
+
 // --- ADR-040 (M-896): the scalar-float value form ------------------------------------------------
 
 use crate::repr::FloatWidth;

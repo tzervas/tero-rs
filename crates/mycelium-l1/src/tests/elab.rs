@@ -3,7 +3,7 @@ use crate::checkty::check_nodule;
 use crate::checkty::Env;
 use crate::elab::*;
 use crate::parse;
-use mycelium_core::{Alt, Node, Payload, Trit};
+use mycelium_core::{Alt, Node, Payload, Repr, Trit};
 use std::collections::BTreeMap;
 
 fn env(src: &str) -> Env {
@@ -423,4 +423,69 @@ fn the_generic_and_trait_residual_sites_remain_as_defensive_invariants() {
         what.contains("generic") || what.contains("monomorph"),
         "the defensive site must still name the generic/monomorphization staging, got: {what}"
     );
+}
+
+// ---- regression: bare `[…]` seq-literal length after the clippy `map_or_identity` fix ---------
+//
+// `elab.rs`'s `Expr::Lit(Literal::List(elems))` arm (RFC-0032 D3, the `Repr::Seq` construction)
+// computed `len` via `u32::try_from(vals.len()).map_or(u32::MAX, |n| n)`; that was rewritten to
+// `.unwrap_or(u32::MAX)` — an identity-preserving cleanup for the clippy `map_or_identity` lint
+// under `-D warnings`. The rewrite is behaviour-preserving (`unwrap_or` and `map_or(default, |n| n)`
+// agree pointwise), but nothing previously pinned the normal, non-overflowing path in a test — this
+// closes that gap.
+
+/// Fixture: elaborate a bare `[…]` literal of `n` distinct `Binary{8}` constants against a
+/// `Seq{Binary{8}, n}` context — the surface fragment `tests/list_literal.rs
+/// ::seq_literal_still_types_as_seq_when_expected` proves reaches the `Repr::Seq` elaboration arm
+/// (elab.rs ~L1196), NOT the RFC-0040 cons-list desugaring (a distinct concern already covered by
+/// `tests/list_literal.rs`). Returns the elaborated value's `Repr::Seq` descriptor length and its
+/// `Payload::Seq` element count, so a case can assert both agree with `n`.
+fn elaborate_seq_literal_of_len(n: u32) -> (Repr, Option<usize>) {
+    let elems: Vec<String> = (0..n).map(|i| format!("0b{:08b}", i % 256)).collect();
+    let src = format!(
+        "nodule d;\nfn f() => Seq{{Binary{{8}}, {n}}} = [{}];\n",
+        elems.join(", ")
+    );
+    let env = env(&src);
+    let node = elaborate(&env, "f")
+        .unwrap_or_else(|e| panic!("n={n}: a Seq{{Binary{{8}}, {n}}} literal must elaborate: {e}"));
+    let Node::Const(ref v) = node else {
+        panic!("n={n}: a seq literal of constants must elaborate to Node::Const, got {node:?}");
+    };
+    (v.repr().clone(), v.seq_len())
+}
+
+/// **Regression (the `unwrap_or(u32::MAX)` cleanup, guarantee: `Empirical`).** For a spread of
+/// element counts, a bare `[…]` seq literal must elaborate to a `Repr::Seq { len, .. }` whose `len`
+/// equals the literal's element count exactly — `Repr::Seq.len` and `Payload::Seq`'s element count
+/// must agree with `n`. Parameterized over a small case table (one loop, one assert body) rather
+/// than four copy-pasted tests, per the house data-driven test convention.
+///
+/// NOT tested here (deliberately): the `u32::MAX` saturation branch on `vals.len() > u32::MAX`
+/// (over 4 billion elements) — not constructible as a surface literal in a test harness, and both
+/// the old `map_or` and the new `unwrap_or` agree on that branch by construction (same default
+/// value), so it carries no regression risk from this specific refactor.
+#[test]
+fn seq_literal_len_matches_element_count_for_several_lengths() {
+    for n in [1u32, 2, 3, 5] {
+        let (repr, seq_len) = elaborate_seq_literal_of_len(n);
+        assert_eq!(
+            seq_len,
+            Some(n as usize),
+            "n={n}: the elaborated Payload::Seq must have exactly n elements"
+        );
+        let Repr::Seq { elem, len } = repr else {
+            panic!("n={n}: expected a Repr::Seq descriptor, got {repr:?}");
+        };
+        assert_eq!(
+            len, n,
+            "n={n}: Repr::Seq.len must equal the literal's element count (the unwrap_or(u32::MAX) \
+             fix must remain an identity on the normal path)"
+        );
+        assert_eq!(
+            *elem,
+            Repr::Binary { width: 8 },
+            "n={n}: the element repr must be Binary{{8}} (taken from the first element)"
+        );
+    }
 }
