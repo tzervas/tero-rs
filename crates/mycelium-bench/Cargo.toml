@@ -1,0 +1,39 @@
+[package]
+name = "mycelium-bench"
+version = "0.0.0"
+description = "Honest benchmarking & evaluation harness (E-BENCH). Measures the existing execution backends — interpreter (trusted base), AOT env-machine, JIT, direct-LLVM, and the MLIR-dialect path (behind `mlir-dialect`) — over a shared v0-calculus program corpus, and ingests the LLM-harness quality/cost/latency reports. Emits a deterministic markdown + JSON report with an explicit WIN/LOSS/REGRESSION table and a 'where we're losing' section. Every number is Empirical (measured, with trial count); no pre-written performance target (VR-5). A differential divergence vs the interpreter is a recorded LOSS; an unlowerable node is a recorded capability LOSS (G2). Complements `xtask e1`/`kc4` (which time packing kernels / cert overhead); this harness times whole programs across backends and classifies wins vs losses."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "bench"
+path = "src/bin/bench.rs"
+
+[features]
+# Forwarded to mycelium-mlir: turns on the real MLIR `ternary`->`arith`/`func`->LLVM dialect path so
+# the harness can time/measure the `dialect::native` backend. OFF by default; the backend probes for
+# the libMLIR toolchain at runtime and the harness records a graceful Skip when it is absent (so even
+# `--features mlir-dialect` is green on a box without the tools). The default build measures interp,
+# AOT env-machine, JIT, and direct-LLVM (the latter two skip gracefully without `llc`/`clang`).
+mlir-dialect = ["mycelium-mlir/mlir-dialect"]
+
+[dependencies]
+# The execution backends under measurement (read-only — the harness measures them, never changes them).
+mycelium-core = { path = "../mycelium-core", version = "0.0.0" }
+mycelium-interp = { path = "../mycelium-interp", version = "0.0.0" }
+mycelium-mlir = { path = "../mycelium-mlir", version = "0.0.0" }
+mycelium-l1 = { path = "../mycelium-l1", version = "0.0.0" }
+# The certified binary<->ternary swap engine the differential corpus exercises (same engine all paths use).
+mycelium-cert = { path = "../mycelium-cert", version = "0.0.0" }
+# The OS-thread Scheduler (M-709) driving the multicore scaling curves (measurement only — the
+# scheduler itself is unmodified, read-only from this crate's perspective).
+mycelium-std-runtime = { path = "../mycelium-std-runtime", version = "0.0.0" }
+# Deterministic JSON for the machine-readable report + the LLM-harness report ingestion.
+serde = { workspace = true }
+serde_json = { workspace = true }

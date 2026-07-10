@@ -1,0 +1,22 @@
+[package]
+name = "mycelium-vsa-decode"
+version = "0.0.0"
+description = "VSA decode-methodology selection (RFC-0010; M-350): the RFC-0005 selector site that chooses among {BruteForceExact, Resonator, Refuse} for a factorization decode and reads the honest guarantee tag off the chosen arm. Relocated out of `mycelium-vsa` (M-971) because it is the only VSA code that depends on `mycelium-select`; keeping it in `mycelium-vsa` made that crate depend on `mycelium-select`, closing the `{interp, select, vsa}` dependency cycle DN-68 forbids. This crate sits above both `mycelium-vsa` and `mycelium-select`."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# The VSA algebra kernel (models, cleanup, resonator, reconstruction) this decode layer selects over.
+mycelium-vsa = { path = "../mycelium-vsa" }
+# RFC-0010: the one RFC-0005 selection mechanism, reused for the decode-method site (no parallel
+# selector). Acyclic — `mycelium-select` depends only on `mycelium-core`; this crate legitimately
+# sits above both, so the former `mycelium-vsa -> mycelium-select` edge (which closed the interp
+# cycle) is gone. See DN-68 + xtask/deps-strata.toml.
+mycelium-select = { path = "../mycelium-select" }
+mycelium-core = { path = "../mycelium-core" }

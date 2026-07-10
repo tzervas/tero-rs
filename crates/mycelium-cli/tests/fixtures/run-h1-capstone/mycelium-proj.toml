@@ -1,0 +1,17 @@
+# Committed fixture for the enb Phase-I H1 capstone (M-914; E28-1). A four-nodule phylum that
+# exercises the landed, `Exact`-tagged H1 surface end-to-end via `myc run`: the signed/unsigned
+# integer op sets (M-766/M-767/M-887/M-888/M-889), the textual string literal + `hash_blake3`/
+# `bytes_eq` (M-910/M-911/M-912), and the `@forage` D-lite placement-policy surface (M-906). Every
+# check folds into one `Binary{1}` truth value via `and` — a passing `myc run` renders `true`. The
+# `Float` value form + `flt.*` ops (M-896-M-900) are `Empirical`-tagged and cannot be folded into
+# this `and`-chain (`bit.and` has no defined ε-propagation rule for a non-`Exact` operand — ADR-010/
+# M-204); they are exercised by the sibling fixture `run-h1-float` instead.
+[project]
+name    = "run_h1_capstone"
+kind    = "phylum"
+version = "0.1.0"
+license = "MIT"
+summary = "run_h1_capstone — the enb H1 capstone `myc run` fixture (M-914)."
+
+[surface]
+exports = ["run_h1_capstone"]

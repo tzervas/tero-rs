@@ -1,0 +1,23 @@
+[package]
+name = "mycelium-sec"
+version = "0.0.0"
+description = "myc-sec — security checks as tooling (M-367): the /security-review posture as a suite tool. v0 implements the Mycelium-specific `wild`-block audit (LR-9/S6 — inventory every denied-by-default unsafe block + require an ADR-014 // SAFETY: justification) and orchestrates the existing secrets/supply-chain gates. Every finding cites why; a missing scanner is REDUCED COVERAGE, never a silent pass (G2/VR-5). KC-3 — above the kernel; no new dependency."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# v0 is dependency-free at the library level (a text-scan recogniser, like the M-141 header lints).
+# The bin orchestrates the existing scripts/checks/{secrets,deny}.sh via std::process (no new crate).
+# M-643: the shared CLI substrate. The bin reuses it for arg handling; the `.myc` walk stays in this
+# crate's own `collect_myc` (lib-public, untouched). In-workspace path dep, std-only (KC-3).
+mycelium-cli-common = { path = "../mycelium-cli-common" }
+
+[[bin]]
+name = "myc-sec"
+path = "src/bin/myc-sec.rs"

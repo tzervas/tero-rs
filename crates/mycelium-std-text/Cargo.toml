@@ -1,0 +1,16 @@
+[package]
+name = "mycelium-std-text"
+version = "0.0.0"
+description = "std.text/string — UTF-8, format, parse (parse -> Result)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }
+mycelium-std-core = { path = "../mycelium-std-core" }

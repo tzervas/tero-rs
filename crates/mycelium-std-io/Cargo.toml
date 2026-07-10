@@ -1,0 +1,22 @@
+[package]
+name = "mycelium-std-io"
+version = "0.0.0"
+description = "std.io + serialize — single-consumption IO + canonical serialization."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }
+mycelium-std-core = { path = "../mycelium-std-core" }
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+# property tests for the round-trip bound; MSRV 1.96.1-compatible (ADR-041)
+proptest = "1"

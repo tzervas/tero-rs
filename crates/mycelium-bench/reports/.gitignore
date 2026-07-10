@@ -1,0 +1,12 @@
+# Generated benchmark artifacts are NOT committed by default — each `bench` run overwrites
+# `latest-report.{md,json}` here with whatever was measured on that host (Empirical; VR-5).
+# A host's numbers are not portable, so per-run output stays out of the tree.
+#
+# One reference pair IS tracked deliberately, as the demonstrable shape of the deliverable:
+#   * SAMPLE-report.md / SAMPLE-report.json — a real harness run on the dev host (interp vs AOT
+#     vs direct-LLVM/JIT over the corpus), kept so the report format + an honest LOSS row are
+#     visible in-tree. Regenerate via `cargo run --release -p mycelium-bench --bin bench`.
+*
+!.gitignore
+!SAMPLE-report.md
+!SAMPLE-report.json

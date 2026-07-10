@@ -1,0 +1,385 @@
+{
+  "metadata": {
+    "harness": "mycelium-grok-coauthor",
+    "version": "0.1.0",
+    "model": "grok-4.3",
+    "mode": "self-test",
+    "endpoint": "mock (offline)",
+    "task_set_id": "gold-compose-v1",
+    "seed": 42,
+    "max_rounds": 3,
+    "timestamp_utc": "SAMPLE-DETERMINISTIC"
+  },
+  "honesty_posture": {
+    "never_silent": true,
+    "guarantee_lattice": [
+      "Exact",
+      "Proven",
+      "Empirical",
+      "Declared"
+    ],
+    "model_allowed_tags": [
+      "Empirical",
+      "Declared"
+    ],
+    "vr5_rule": "Model-derived claims are Empirical or Declared \u2014 NEVER Proven or Exact. A SKIP is never a PASS. The retention/leverage verdict is reported as a computed comparison and stays open/Declared until the full live campaign runs.",
+    "synthetic": true,
+    "synthetic_note": "SYNTHETIC (self-test): produced by the deterministic offline mock client. NOT a real model measurement; carries no quality evidence."
+  },
+  "quality": {
+    "total": 3,
+    "scored": 3,
+    "skipped": 0,
+    "syntactic_valid": 3,
+    "typecheck_pass": 3,
+    "syntactic_validity_rate": 1.0,
+    "typecheck_pass_rate": 1.0,
+    "edit_to_fix_iterations": [
+      1,
+      2,
+      1
+    ],
+    "mean_edit_to_fix": 1.3333333333333333
+  },
+  "performance": {
+    "prompt_tokens": 265,
+    "completion_tokens": 113,
+    "total_tokens": 378,
+    "total_cost_usd": 0.00061375,
+    "request_count": 4,
+    "batch_count": 0,
+    "mean_latency_s": 0.0,
+    "total_latency_s": 0.0
+  },
+  "outcomes": [
+    {
+      "task_id": "g01",
+      "spec": "identity",
+      "model": "grok-4.3",
+      "status": "PASS",
+      "guarantee_tag": "Declared",
+      "iterations_to_clean": 1,
+      "rounds": [
+        {
+          "attempt": 1,
+          "is_correction": false,
+          "verdict": "clean",
+          "syntactic_valid": true,
+          "typecheck_pass": true,
+          "prompt_tokens": 60,
+          "completion_tokens": 25,
+          "latency_s": 0.0,
+          "cost_usd": 0.0001375,
+          "chat_ok": true,
+          "chat_error": "",
+          "diagnostics": []
+        }
+      ],
+      "total_prompt_tokens": 60,
+      "total_completion_tokens": 25,
+      "total_latency_s": 0.0,
+      "total_cost_usd": 0.0001375,
+      "message": "clean on first attempt"
+    },
+    {
+      "task_id": "g02",
+      "spec": "double",
+      "model": "grok-4.3",
+      "status": "PARTIAL_PASS",
+      "guarantee_tag": "Declared",
+      "iterations_to_clean": 2,
+      "rounds": [
+        {
+          "attempt": 1,
+          "is_correction": false,
+          "verdict": "type_error",
+          "syntactic_valid": true,
+          "typecheck_pass": false,
+          "prompt_tokens": 55,
+          "completion_tokens": 18,
+          "latency_s": 0.0,
+          "cost_usd": 0.00011375,
+          "chat_ok": true,
+          "chat_error": "",
+          "diagnostics": [
+            {
+              "message": "diagnostic for exit 3"
+            }
+          ]
+        },
+        {
+          "attempt": 2,
+          "is_correction": true,
+          "verdict": "clean",
+          "syntactic_valid": true,
+          "typecheck_pass": true,
+          "prompt_tokens": 80,
+          "completion_tokens": 30,
+          "latency_s": 0.0,
+          "cost_usd": 0.000175,
+          "chat_ok": true,
+          "chat_error": "",
+          "diagnostics": []
+        }
+      ],
+      "total_prompt_tokens": 135,
+      "total_completion_tokens": 48,
+      "total_latency_s": 0.0,
+      "total_cost_usd": 0.00028875,
+      "message": "clean after 2 attempts (self-corrected)"
+    },
+    {
+      "task_id": "g04",
+      "spec": "widen",
+      "model": "grok-4.3",
+      "status": "PASS",
+      "guarantee_tag": "Declared",
+      "iterations_to_clean": 1,
+      "rounds": [
+        {
+          "attempt": 1,
+          "is_correction": false,
+          "verdict": "clean",
+          "syntactic_valid": true,
+          "typecheck_pass": true,
+          "prompt_tokens": 70,
+          "completion_tokens": 40,
+          "latency_s": 0.0,
+          "cost_usd": 0.0001875,
+          "chat_ok": true,
+          "chat_error": "",
+          "diagnostics": []
+        }
+      ],
+      "total_prompt_tokens": 70,
+      "total_completion_tokens": 40,
+      "total_latency_s": 0.0,
+      "total_cost_usd": 0.0001875,
+      "message": "clean on first attempt"
+    }
+  ],
+  "ablation": {
+    "experiment": "M-381 retention-ratio ablation (research/11 \u00a7T11.7; RP-1)",
+    "model": "grok-4.3",
+    "task_set_id": "gold-compose-v1",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "arms": [
+      {
+        "arm_id": "arm1-bare-novel-surface",
+        "description": "bare novel text surface",
+        "ran": true,
+        "blocked_reason": "",
+        "n_samples": 9,
+        "n_clean": 9,
+        "pass_at_1": 1.0,
+        "guarantee_tag": "Declared",
+        "per_sample": [
+          {
+            "task_id": "g01",
+            "seed": 1,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 124,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g01",
+            "seed": 2,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 124,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g01",
+            "seed": 3,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 124,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g02",
+            "seed": 1,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 124,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g02",
+            "seed": 2,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 124,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g02",
+            "seed": 3,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 124,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g04",
+            "seed": 1,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 124,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g04",
+            "seed": 2,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 124,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g04",
+            "seed": 3,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 124,
+            "completion_tokens": 11
+          }
+        ]
+      },
+      {
+        "arm_id": "arm2-grammar-primer",
+        "description": "+ book-quality grammar-in-context primer",
+        "ran": true,
+        "blocked_reason": "",
+        "n_samples": 9,
+        "n_clean": 9,
+        "pass_at_1": 1.0,
+        "guarantee_tag": "Declared",
+        "per_sample": [
+          {
+            "task_id": "g01",
+            "seed": 1,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 259,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g01",
+            "seed": 2,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 259,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g01",
+            "seed": 3,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 259,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g02",
+            "seed": 1,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 258,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g02",
+            "seed": 2,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 258,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g02",
+            "seed": 3,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 258,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g04",
+            "seed": 1,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 258,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g04",
+            "seed": 2,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 258,
+            "completion_tokens": 11
+          },
+          {
+            "task_id": "g04",
+            "seed": 3,
+            "clean": true,
+            "verdict": "clean",
+            "prompt_tokens": 258,
+            "completion_tokens": 11
+          }
+        ]
+      },
+      {
+        "arm_id": "arm3-grammar-constrained-decoding",
+        "description": "+ grammar-constrained decoding (GBNF/Outlines/Guidance)",
+        "ran": false,
+        "blocked_reason": "needs a grammar-constrained decoder integration (M-380); not built yet, and the OpenAI-compatible REST surface does not expose GBNF. Not fabricated (VR-5).",
+        "n_samples": 0,
+        "n_clean": 0,
+        "pass_at_1": null,
+        "guarantee_tag": "Declared",
+        "per_sample": []
+      },
+      {
+        "arm_id": "arm4-llm-canonical-projection",
+        "description": "LlmCanonical projection (familiar-skin, same AST)",
+        "ran": false,
+        "blocked_reason": "needs the LlmCanonical projection renderer over mycelium-core (M-380 / T11.4); not built yet. The retention-ratio DENOMINATOR \u2014 so the threshold comparison is indeterminate until this arm runs (research/11 \u00a7T11.7 step 3). Not fabricated (VR-5).",
+        "n_samples": 0,
+        "n_clean": 0,
+        "pass_at_1": null,
+        "guarantee_tag": "Declared",
+        "per_sample": []
+      },
+      {
+        "arm_id": "arm5-embedded-dsl-baseline",
+        "description": "embedded-DSL baseline (RR-3)",
+        "ran": false,
+        "blocked_reason": "needs an embedded-DSL baseline harness (RR-3); out of scope for the Grok harness wiring. Not fabricated (VR-5).",
+        "n_samples": 0,
+        "n_clean": 0,
+        "pass_at_1": null,
+        "guarantee_tag": "Declared",
+        "per_sample": []
+      }
+    ],
+    "retention": {
+      "determinate": false,
+      "retention_ratio": null,
+      "threshold": 0.7,
+      "best_novel_arm": "arm1-bare-novel-surface",
+      "best_novel_pass_at_1": 1.0,
+      "canonical_pass_at_1": null,
+      "conclusion": "INDETERMINATE \u2014 pending run: arm 4 (LlmCanonical) did not run. The threshold comparison applies only when arm 4 is present (research/11 \u00a7T11.7 step 3).",
+      "leverage_claim_tag": "Declared",
+      "note": "VR-5: this is the COMPUTED comparison from the arms actually run, not a ratified verdict. The leverage hypothesis stays open/Declared until the full \u22653-seed, \u22651-frontier campaign (research/11 \u00a7T11.6)."
+    }
+  }
+}

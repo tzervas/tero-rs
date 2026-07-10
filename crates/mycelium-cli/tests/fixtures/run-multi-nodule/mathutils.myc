@@ -1,0 +1,10 @@
+// nodule: mathutils
+// @summary: `myc run` multi-nodule fixture (M-909) — a library nodule with a private helper and a
+// `pub` function that calls it. `quadruple` is the only name `run_multi_nodule.myc` imports;
+// `quadruple_inner` stays private to this nodule (never `use`d by the entry) — running this
+// program end-to-end exercises the transitive cross-nodule link the M-909 `Env` merge exists for.
+nodule mathutils;
+
+fn quadruple_inner(x: Binary{8}) => Binary{8} = add_u(x, x);
+
+pub fn quadruple(x: Binary{8}) => Binary{8} = add_u(quadruple_inner(x), quadruple_inner(x));

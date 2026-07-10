@@ -1,0 +1,39 @@
+[package]
+name = "mycelium-std-conformance"
+version = "0.0.0"
+description = "Standard-library port-conformance test harness (M-971; RFC-0031 D5/D6): the three-way differential (L1-eval ≡ elaborate→L0-interp ≡ AOT) between each `lib/std/<name>.myc` nodule port and its retained Rust `mycelium-std-<name>` oracle. Relocated out of `mycelium-l1` (M-971) so the trusted `core`-tier L1 crate no longer dev-depends on the `std`-tier oracle crates — the tests legitimately live in this higher-tier crate that may depend on both. Test-only: the crate has no library surface."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+# Test-only crate: the port-differential integration tests in `tests/` drive the L1 frontend, the
+# reference interpreter, the AOT env-machine, and the shared M-210 checker against each ported
+# `.myc` nodule, and compare against the retained Rust std oracle (RFC-0031 D6 — the oracle crates
+# are NOT retired). All dependencies are dev-dependencies (the crate exports no library items), so
+# this crate has zero in-workspace NORMAL deps (stratum 0) and no crate depends on it (a sink) —
+# it participates in no dependency cycle. It sits at the `std` tier because it depends on the
+# `std`-tier oracle crates; its downward deps on the `core`-tier L1 stack (l1/interp/cert/mlir) are
+# tier-legal (std -> core). See xtask/deps-strata.toml + DN-68.
+[dev-dependencies]
+# The L1 frontend + trusted execution stack the shared harness drives (three-way differential).
+mycelium-core = { path = "../mycelium-core" }
+mycelium-l1 = { path = "../mycelium-l1" }
+mycelium-interp = { path = "../mycelium-interp" }
+mycelium-cert = { path = "../mycelium-cert" }
+mycelium-mlir = { path = "../mycelium-mlir" }
+# The retained Rust oracles (RFC-0031 D6, test scope only; crates not retired). Each `std_<name>.rs`
+# differential compares its `.myc` port against the ACTUAL public surface of the matching oracle.
+mycelium-std-core = { path = "../mycelium-std-core" }
+mycelium-std-diag = { path = "../mycelium-std-diag" }
+mycelium-std-error = { path = "../mycelium-std-error" }
+mycelium-std-recover = { path = "../mycelium-std-recover" }
+mycelium-std-select = { path = "../mycelium-std-select" }
+mycelium-std-spore = { path = "../mycelium-std-spore" }
+mycelium-std-swap = { path = "../mycelium-std-swap" }
+mycelium-std-ternary = { path = "../mycelium-std-ternary" }
+mycelium-std-testing = { path = "../mycelium-std-testing" }

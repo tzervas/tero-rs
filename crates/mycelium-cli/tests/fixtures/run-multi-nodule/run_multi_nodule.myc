@@ -1,0 +1,10 @@
+// nodule: run_multi_nodule
+// @summary: `myc run` multi-nodule fixture (M-909) — the entry nodule. `main` calls the imported
+// `mathutils.quadruple`, which internally calls a private helper of `mathutils` that this nodule
+// never imports (see `mathutils.myc`) — a real end-to-end multi-nodule link, not just a same-file
+// multi-`fn` call.
+nodule run_multi_nodule;
+
+use mathutils.quadruple;
+
+fn main() => Binary{8} = quadruple(0b0000_0011);

@@ -1,0 +1,13 @@
+# Committed fixture for `myc run` multi-nodule (M-909). Two nodules, real cross-nodule linking:
+# `run_multi_nodule` (the entry) `use`s `mathutils.quadruple`, whose body calls a *private* helper
+# of `mathutils` that the entry nodule never imports — exercising the transitive link the v0
+# flatten-by-name `Env` merge exists for (see `run_multi_nodule`'s doc in `src/lib.rs`).
+[project]
+name    = "run_multi_nodule"
+kind    = "phylum"
+version = "0.1.0"
+license = "MIT"
+summary = "run_multi_nodule — a myc run multi-nodule (M-909) fixture."
+
+[surface]
+exports = ["run_multi_nodule"]

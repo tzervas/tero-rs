@@ -1,0 +1,41 @@
+// nodule: run_h1_capstone
+// @summary: `myc run` H1 capstone (M-914) — the entry nodule.
+nodule run_h1_capstone;
+
+// `main` imports each `Exact`-tagged landed-surface check (signed integer ops, unsigned integer
+// ops, and the string-literal + `hash_blake3`/`bytes_eq` check — the last riding inside a
+// `colony { @forage(…) hypha … }`, RFC-0008 RT3 D-lite / M-906, to exercise the landed
+// placement-policy surface end-to-end) and folds all three into one `Binary{1}` via `and`. Every
+// sub-check is a hand-verified worked example (see each nodule's doc comment and
+// `crates/mycelium-l1/tests/enablement.rs`), so a passing `myc run` renders `true` — a wrong
+// constant anywhere would flip the render to `false`, not silently pass.
+//
+// WHY NO `Float` HERE (a genuine constraint discovered by this task, `Empirical`, G2/VR-5): every
+// `flt.*` op is `Empirical`-tagged (ADR-040 §2.6), and `bit.and` (the kernel prim behind surface
+// `and`) is registered with `ApproxRule::Refuse` — it has **no defined ε-propagation rule for an
+// approximate input** (ADR-010/M-204) and refuses at run time
+// (`bit.and: no defined ε-propagation rule for an approximate input`) the moment ANY operand is
+// non-`Exact`, even two `Empirical` operands together. So a `flt_eq`/`flt_lt` result cannot be
+// folded into this (or any) `and`-chain. The float leg of the H1 surface is exercised by the
+// sibling single-nodule fixture `run-h1-float` instead, whose `main` is a single `flt_eq(...)`
+// expression — nothing to `and` together, so the constraint never bites. This is a real, honestly
+// recorded surface constraint, not a workaround for a bug: fabricating a composite bound `bit.and`
+// cannot honestly provide would violate the transparency rule.
+//
+// KNOWN GAP (`mycfmt` v0, discovered by this task, `Empirical`): `mycfmt` does not yet render the
+// `@forage(policy)` annotation in `Colony`'s canonical printer (`render_expr_canonical` in
+// `crates/mycelium-fmt/src/lib.rs` drops `Hypha::forage`), so `mycfmt --check`/`--write` on THIS
+// file refuses (exit 4, "outside mycfmt v0" — an honest out-of-scope refusal, not a silent drop,
+// per G2) rather than reformatting. The parser/checker/elaborator/interpreter all fully support
+// `@forage` (three-way tested, `crates/mycelium-l1/tests/differential.rs` M-906 section); only the
+// formatter's canonical-render path is missing this one case. FLAGged, not fixed by this task
+// (`mycelium-fmt` is out of this leaf's ownership scope).
+use h1_signed.signed_checks;
+use h1_unsigned.unsigned_checks;
+use h1_strings.strings_checks;
+
+fn main() => Binary{1} =
+  and(
+    and(signed_checks(), unsigned_checks()),
+    colony { @forage(0b101) hypha strings_checks() }
+  );

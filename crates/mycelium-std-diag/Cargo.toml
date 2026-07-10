@@ -1,0 +1,17 @@
+[package]
+name = "mycelium-std-diag"
+version = "0.0.0"
+description = "std.diag — the ergonomic failure-legibility surface (dual human/JSON projection, severity, locus) over the mycelium-diag record kernel (M-510)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-diag = { path = "../mycelium-diag" }
+
+[dev-dependencies]

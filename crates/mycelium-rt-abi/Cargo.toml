@@ -1,0 +1,25 @@
+[package]
+name = "mycelium-rt-abi"
+version = "0.0.0"
+description = "mycelium-rt-abi — the runtime-ABI seam (M-883/M-884; ADR-038 §2.2): the reclamation EXPLAIN/audit record (RFC-0027 §9) and the structured-concurrency supervision/cancellation surface (M-713 / RFC-0008 RT4·RT7), relocated below `mycelium-std-runtime` so `mycelium-mlir` (core tier) can consume them without an upward `core -> std` dependency edge (the M-877/M-879 acyclic-deps gate)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }
+# The M-356 composition kernel (CancelToken/TaskOutcome/Supervisor/RestartIntensity/Escalation) that
+# `supervision::supervise_with_restart` reuses — already below this crate (mycelium-interp is core
+# tier, stratum 2; see xtask/deps-strata.toml). No cycle: mycelium-interp does not depend on this crate.
+mycelium-interp = { path = "../mycelium-interp" }
+# The work-stealing OS-thread Scheduler (M-709/M-861) `supervision::run_supervised` dispatches
+# through — already below this crate (mycelium-sched is core tier, stratum 1). No cycle.
+mycelium-sched = { path = "../mycelium-sched" }
+
+[dev-dependencies]
+proptest = "1"

@@ -1,0 +1,227 @@
+{
+  "host_tag": "x86_64-linux, 4 hw threads",
+  "captured": "2026-07-01 / claude/leaf/E25-M859-bench-scaling / M-859 initial baseline (release build, cargo run --release -p mycelium-bench --bin bench)",
+  "trial_iters": 20000,
+  "entries": [
+    {
+      "case_id": "bit-literal",
+      "backend": "interp",
+      "ns_per_call": 81.0755
+    },
+    {
+      "case_id": "bit-literal",
+      "backend": "aot-env",
+      "ns_per_call": 14864.7672
+    },
+    {
+      "case_id": "bit-literal",
+      "backend": "jit",
+      "ns_per_call": 30728.3955
+    },
+    {
+      "case_id": "bit-literal",
+      "backend": "direct-llvm",
+      "ns_per_call": 1216555.675
+    },
+    {
+      "case_id": "bit-not",
+      "backend": "interp",
+      "ns_per_call": 1233.48565
+    },
+    {
+      "case_id": "bit-not",
+      "backend": "aot-env",
+      "ns_per_call": 17201.24315
+    },
+    {
+      "case_id": "bit-not",
+      "backend": "jit",
+      "ns_per_call": 31472.193
+    },
+    {
+      "case_id": "bit-not",
+      "backend": "direct-llvm",
+      "ns_per_call": 1216211.525
+    },
+    {
+      "case_id": "bit-xor-not",
+      "backend": "interp",
+      "ns_per_call": 3124.15625
+    },
+    {
+      "case_id": "bit-xor-not",
+      "backend": "aot-env",
+      "ns_per_call": 19676.09285
+    },
+    {
+      "case_id": "bit-xor-not",
+      "backend": "jit",
+      "ns_per_call": 31432.1235
+    },
+    {
+      "case_id": "bit-xor-not",
+      "backend": "direct-llvm",
+      "ns_per_call": 1202339.55
+    },
+    {
+      "case_id": "bit-let-chain",
+      "backend": "interp",
+      "ns_per_call": 6278.72685
+    },
+    {
+      "case_id": "bit-let-chain",
+      "backend": "aot-env",
+      "ns_per_call": 23609.297
+    },
+    {
+      "case_id": "bit-let-chain",
+      "backend": "jit",
+      "ns_per_call": 31349.493
+    },
+    {
+      "case_id": "bit-let-chain",
+      "backend": "direct-llvm",
+      "ns_per_call": 1208670.975
+    },
+    {
+      "case_id": "trit-neg",
+      "backend": "interp",
+      "ns_per_call": 1245.36395
+    },
+    {
+      "case_id": "trit-neg",
+      "backend": "aot-env",
+      "ns_per_call": 17300.63815
+    },
+    {
+      "case_id": "trit-neg",
+      "backend": "jit",
+      "ns_per_call": 31965.8815
+    },
+    {
+      "case_id": "trit-neg",
+      "backend": "direct-llvm",
+      "ns_per_call": 1247332.125
+    },
+    {
+      "case_id": "trit-add",
+      "backend": "interp",
+      "ns_per_call": 1766.37095
+    },
+    {
+      "case_id": "trit-add",
+      "backend": "aot-env",
+      "ns_per_call": 17866.64985
+    },
+    {
+      "case_id": "trit-add",
+      "backend": "jit",
+      "ns_per_call": 31893.1565
+    },
+    {
+      "case_id": "trit-add",
+      "backend": "direct-llvm",
+      "ns_per_call": 1210096.125
+    },
+    {
+      "case_id": "swap-roundtrip",
+      "backend": "interp",
+      "ns_per_call": 3529.7472
+    },
+    {
+      "case_id": "swap-roundtrip",
+      "backend": "aot-env",
+      "ns_per_call": 20212.13365
+    },
+    {
+      "case_id": "swap-roundtrip",
+      "backend": "jit",
+      "ns_per_call": 31954.2255
+    },
+    {
+      "case_id": "swap-roundtrip",
+      "backend": "direct-llvm",
+      "ns_per_call": 1196967.8
+    },
+    {
+      "case_id": "data-match-repr",
+      "backend": "interp",
+      "ns_per_call": 1524.90755
+    },
+    {
+      "case_id": "data-match-repr",
+      "backend": "aot-env",
+      "ns_per_call": 18260.88755
+    },
+    {
+      "case_id": "data-match-repr",
+      "backend": "jit",
+      "ns_per_call": 31437.52
+    },
+    {
+      "case_id": "data-match-repr",
+      "backend": "direct-llvm",
+      "ns_per_call": 1203340.8
+    },
+    {
+      "case_id": "data-construct",
+      "backend": "interp",
+      "ns_per_call": 326.0197
+    },
+    {
+      "case_id": "data-construct",
+      "backend": "aot-env",
+      "ns_per_call": 16643.95835
+    },
+    {
+      "case_id": "data-nested-match",
+      "backend": "interp",
+      "ns_per_call": 4200.2863
+    },
+    {
+      "case_id": "data-nested-match",
+      "backend": "aot-env",
+      "ns_per_call": 30353.85185
+    },
+    {
+      "case_id": "rec-self",
+      "backend": "interp",
+      "ns_per_call": 27361.09805
+    },
+    {
+      "case_id": "rec-self",
+      "backend": "aot-env",
+      "ns_per_call": 43834.56345
+    },
+    {
+      "case_id": "rec-build",
+      "backend": "interp",
+      "ns_per_call": 44260.5579
+    },
+    {
+      "case_id": "rec-build",
+      "backend": "aot-env",
+      "ns_per_call": 38160.7134
+    },
+    {
+      "case_id": "rec-mutual",
+      "backend": "interp",
+      "ns_per_call": 56138.36535
+    },
+    {
+      "case_id": "rec-mutual",
+      "backend": "aot-env",
+      "ns_per_call": 49735.1719
+    },
+    {
+      "case_id": "rec-fold",
+      "backend": "interp",
+      "ns_per_call": 39292.31095
+    },
+    {
+      "case_id": "rec-fold",
+      "backend": "aot-env",
+      "ns_per_call": 147619.9706
+    }
+  ]
+}

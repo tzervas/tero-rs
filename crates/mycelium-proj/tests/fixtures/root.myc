@@ -1,0 +1,10 @@
+// nodule: geometry.shapes
+// @version: 1.2.0
+// @license: Apache-2.0
+// @authors: Tyler Zervas
+// @since: 2026-01-10
+// @updated: 2026-06-16
+// @summary: 2D shape primitives and area/perimeter ops.
+nodule geometry.shapes;
+
+fn area_unit() => Binary{8} = 0b0000_0001;

@@ -1,0 +1,26 @@
+[package]
+name = "mycelium-std-spore"
+version = "0.0.0"
+description = "std.spore — the content-addressed deployable + reconstruction-manifest library surface over the mycelium-spore packager (M-522)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }
+mycelium-std-core = { path = "../mycelium-std-core" }
+mycelium-std-content = { path = "../mycelium-std-content" }
+mycelium-std-vsa = { path = "../mycelium-std-vsa" }
+mycelium-std-numerics = { path = "../mycelium-std-numerics" }
+mycelium-spore = { path = "../mycelium-spore" }
+mycelium-proj = { path = "../mycelium-proj" }
+mycelium-vsa = { path = "../mycelium-vsa" }
+# blake3 is already a vetted workspace dependency (mycelium-core, mycelium-spore)
+blake3.workspace = true
+# serde_json is used for canonical manifest hashing (ReconManifest::manifest_hash)
+serde_json.workspace = true

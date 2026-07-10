@@ -1,0 +1,22 @@
+[package]
+name = "mycelium-core"
+version = "0.0.0"
+description = "Mycelium Core IR: Value<Repr,Meta>, guarantee lattice, content-addressing (RFC-0001). Skeleton; types land in M-101+."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Content-addressing (M-103): hash-of-AST identity. BLAKE3 is the fixed kernel hash (id::ContentHash).
+blake3.workspace = true
+# (De)serialization to/from the ratified JSON data contracts (M-104; RFC-0001 §4.8).
+serde.workspace = true
+
+[dev-dependencies]
+# JSON round-trip + schema-shape tests; the on-the-wire form is JSON (M-104).
+serde_json.workspace = true

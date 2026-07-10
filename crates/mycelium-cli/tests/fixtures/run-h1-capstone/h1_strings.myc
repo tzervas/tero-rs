@@ -1,0 +1,9 @@
+// nodule: h1_strings
+// @summary: H1 capstone demo (M-914) — the textual string literal + `hash_blake3`/`bytes_eq`.
+nodule h1_strings;
+
+// `"…"` (M-910/M-911, sharing `Repr::Bytes` with the `0x…` literal) plus `hash_blake3`/`bytes_eq`
+// (M-912). Every op self-checks against a hand-derived expectation and folds into one `Binary{1}`
+// truth value.
+pub fn strings_checks() => Binary{1} =
+  and(and(bytes_eq(hash_blake3("mycelium"), hash_blake3("mycelium")), eq(bytes_get("mycelium", 0b0000_0000), 0b0110_1101)), eq(bytes_len("mycelium"), 0b0000_0000_0000_0000_0000_0000_0000_1000));

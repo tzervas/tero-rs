@@ -1,0 +1,16 @@
+[package]
+name = "mycelium-std-dense"
+version = "0.0.0"
+description = "std.dense — typed dim-tracked tensors/embeddings capability surface (M-518)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }
+mycelium-dense = { path = "../mycelium-dense" }

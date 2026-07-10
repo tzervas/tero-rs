@@ -1,0 +1,9 @@
+// nodule: h1_signed
+// @summary: H1 capstone demo (M-914) — the two's-complement signed integer op set.
+nodule h1_signed;
+
+// `add_s`/`sub_s`/`mul_s`/`div_s`/`rem_s`/`neg_s`/`shr_s` (ADR-028/DN-72 signedness-as-operations).
+// Every op self-checks against a hand-derived expectation (mirroring the worked examples in
+// `crates/mycelium-l1/tests/enablement.rs`) and folds into one `Binary{1}` truth value.
+pub fn signed_checks() => Binary{1} =
+  and(and(and(eq(add_s(0b1111_1101, 0b0000_0100), 0b0000_0001), eq(sub_s(0b0000_0100, 0b1111_1101), 0b0000_0111)), and(eq(mul_s(0b1111_1101, 0b0000_0100), 0b1111_0100), eq(div_s(0b1111_1001, 0b0000_0010), 0b1111_1101))), and(eq(rem_s(0b1111_1001, 0b0000_0010), 0b1111_1111), and(eq(neg_s(0b0000_0011), 0b1111_1101), eq(shr_s(0b1000_0000, 0b0000_0100), 0b1111_1000))));

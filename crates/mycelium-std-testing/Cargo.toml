@@ -1,0 +1,18 @@
+[package]
+name = "mycelium-std-testing"
+version = "0.0.0"
+description = "std.testing — property / golden / differential test harness; a skipped check is reported, never a silent pass (M-534)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }
+mycelium-proj = { path = "../mycelium-proj" }
+mycelium-std-core = { path = "../mycelium-std-core" }
+mycelium-diag = { path = "../mycelium-diag" }

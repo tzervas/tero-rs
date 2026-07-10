@@ -1,0 +1,17 @@
+{
+  "host_tag": "x86_64-linux, 4 hw threads",
+  "captured": "tero-eval run over 16 questions",
+  "trial_iters": 5,
+  "entries": [
+    {
+      "case_id": "aggregate",
+      "system": "layer1",
+      "ns_per_call": 3246771.0375
+    },
+    {
+      "case_id": "aggregate",
+      "system": "layer2",
+      "ns_per_call": 85884490.1125
+    }
+  ]
+}

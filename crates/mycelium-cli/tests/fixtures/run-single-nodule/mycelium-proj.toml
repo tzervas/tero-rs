@@ -1,0 +1,11 @@
+# Committed fixture for `myc run` v0 (M-908). A minimal, gate-clean, single-nodule phylum whose
+# `main` runs through the reference interpreter end-to-end.
+[project]
+name    = "run_hello"
+kind    = "phylum"
+version = "0.1.0"
+license = "MIT"
+summary = "run_hello — a myc run v0 single-nodule fixture."
+
+[surface]
+exports = ["run_hello"]

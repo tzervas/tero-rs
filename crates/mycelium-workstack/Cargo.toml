@@ -1,0 +1,24 @@
+[package]
+name = "mycelium-workstack"
+version = "0.0.0"
+description = "The shared recursion-budget + guarded-stack leaf for RFC-0041 (W1). Home of the never-silent `RecursionBudget` (depth on the §4.0 metric + memory ceiling + work-step budget), the canonical over-budget `BudgetError` surface (`DepthExceeded`/`OutOfBudget`), the consumer-side RAII charging (`DepthGuard`, `charge_bytes`/`charge_steps`), the process-wide arena, and a thin `ensure_sufficient_stack` guard helper. A `#![forbid(unsafe_code)]` LEAF, downward-only per DN-68: it exposes only counters/limits and depends on nothing upward (no interp/core/l1) — charging happens consumer-side. It is NOT a universal `WorkStack<Frame>`; each machine keeps its own frame shape (RFC-0041 §4.1)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Downward-only (DN-68): std + the host-stack adapter leaf ONLY. Never `mycelium-interp`/`-core`/`-l1`
+# — those are UPWARD; the leaf exposes counters/limits and the charge happens consumer-side (§4.1).
+mycelium-stack = { path = "../mycelium-stack" }
+
+# NOTE: this crate is a strict downward-only leaf (DN-68) with NO dev-dependencies either — a
+# `[dev-dependencies]` back-edge onto an upward machine crate (e.g. mycelium-l1) closes a
+# normal+dev cycle that the acyclic-deps gate rejects (cargo tolerates dev-cycles; our gate does
+# not). The §4.2 frame-size baseline that needs `size_of` of the machine value/frame structs
+# therefore lives DOWNSTREAM (mycelium-l1/tests/frame_size_baseline.rs for the public value structs;
+# an in-crate mycelium-mlir test for the private AOT `Frame`), importing `MAX_FRAME_BYTES` from here.

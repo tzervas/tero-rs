@@ -1,0 +1,23 @@
+[package]
+name = "mycelium-proj"
+version = "0.0.0"
+description = "Project-metadata layer (M-359; DN-06 §6; KC-3 — above the kernel): the structured nodule header (`// @key: value`), the `mycelium-proj.toml` manifest (a minimal, dependency-free TOML-subset reader), and the EXPLAIN-able top-down inheritance resolver. Metadata is not identity (ADR-003); unknown keys / bad SPDX / non-ISO dates are explicit errors (G2)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Reuses the L1 `// nodule:` marker recogniser (M-358); the structured header layers on top of it.
+mycelium-l1 = { path = "../mycelium-l1" }
+# The `CertMode` type (M-786) the `@certification` attribute resolves to (RFC-0034 §6; M-790). proj
+# already depends transitively on core via l1, so this introduces no new dependency cycle.
+mycelium-core = { path = "../mycelium-core" }
+
+[dev-dependencies]
+# Property-based testing for the resolution-precedence + cross-mode-boundary laws (M-790; RFC-0034 §6).
+proptest = "1"

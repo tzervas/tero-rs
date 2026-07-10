@@ -1,0 +1,38 @@
+[package]
+name = "mycelium-cert"
+version = "0.0.0"
+description = "Swap certificates, the binary<->ternary certified swap (RFC-0002 §3/§4; M-120), and the single shared translation-validation checker (RFC-0002 §2 / RFC-0004 §3; M-210)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }
+mycelium-interp = { path = "../mycelium-interp" }
+# The M-210 checker discharges bounded instances through the E2-4 tier-i kernel and consumes the
+# shared {ε,δ,strength} certificate (ADR-010; RFC-0002 §2).
+mycelium-numerics = { path = "../mycelium-numerics" }
+# The M-231 Dense<->VSA swap reuses the M-131 checked capacity instantiation (RFC-0003 §5).
+mycelium-vsa = { path = "../mycelium-vsa" }
+serde.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+# M-882: `mycelium-proj`/`mycelium-spore` were previously dev-dependencies here for the M-794 §13
+# conformance suite (tests/conformance.rs). That created two dev-dep cycles — `cert →[dev] proj → …
+# → l1 → cert` and `cert →[dev] spore → proj → … → l1 → cert` — because (unlike the removed comment
+# claimed) `mycelium-proj` depends on `mycelium-l1`, which depends on `mycelium-cert`. On inspection,
+# the clauses that used those crates (d/e/f) never actually exercised any `mycelium-cert` code path:
+# they called `mycelium_proj::cert_scope::{explain_mode, compose, …}` and
+# `mycelium_spore::build_spore` on values built entirely from `mycelium-core` types
+# (`CertMode`/`GuaranteeStrength`), with no wiring back through cert. That exact coverage already
+# exists — more thoroughly, with proptest — in each owning crate's own suite: see
+# `crates/mycelium-proj/src/tests/cert_scope.rs` (clauses d/f) and
+# `crates/mycelium-spore/src/tests/lib_tests.rs` (clause e). The redundant cross-crate duplication is
+# removed; `tests/conformance.rs` now covers clauses a/b/c (the ones that genuinely exercise this
+# crate) plus pointer comments to where d/e/f are verified.

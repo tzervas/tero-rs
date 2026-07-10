@@ -1,0 +1,23 @@
+[package]
+name = "mycelium-std-recover"
+version = "0.0.0"
+description = "std.recover — the declarative recovery bridge (Outcome / PolicyRef; every error recovered or re-propagated, never dropped) over the mycelium-diag record (M-520, Rust-first half)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }
+mycelium-std-core = { path = "../mycelium-std-core" }
+mycelium-diag = { path = "../mycelium-diag" }
+mycelium-interp = { path = "../mycelium-interp" }
+blake3.workspace = true
+# serde + serde_json: stable canonical encoding for fallback values in PolicyRef hash (banked guard #5).
+# Both are vetted workspace deps (mycelium-core, mycelium-std-spore, etc. already use them).
+serde.workspace = true
+serde_json.workspace = true

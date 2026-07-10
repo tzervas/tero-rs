@@ -1,0 +1,42 @@
+# Mycelium Rust workspace (M-091). The Rust kernel is the reference interpreter + trusted base
+# (ADR-007); MLIR->LLVM is the AOT perf path. Crates are skeletons here — types/semantics land
+# per their own issues (M-101+). MSRV is pinned to 1.96.1 (ADR-007, bumped by ADR-041); see rust-toolchain.toml.
+[workspace]
+resolver = "2"
+members = ["crates/*"]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.96.1"
+license = "MIT"
+repository = "https://github.com/tzervas/mycelium"
+
+# M-376 P1: hoisted external deps so version bumps are single-point (DN-17 §2.1).
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+blake3 = "1"
+# M-1017 (DN-87 §2.3 / ADR-044): the async runtime + web framework behind the `mycelium-tero` HTTP
+# front. The FIRST async runtime in the workspace — a deliberate, maintainer-authorized decision (the
+# HTTP API is a genuinely concurrent, multi-client server surface, unlike every prior crate). Consumers
+# add the feature set they need (`tokio = { workspace = true, features = [...] }`). Plain HTTP only —
+# no TLS/`rustls`/`ring` pulled (the token-scoped floor binds 127.0.0.1; TLS is the reverse-proxy's job).
+tokio = { version = "1" }
+axum = { version = "0.8" }
+[workspace.lints.rust]
+# ADR-014: `unsafe` is permitted-but-warned (not forbidden). Plain `cargo build`/`cargo test`
+# (dev/test) warn at every unsafe site — the caution incentive — and still compile/run; the
+# `just check` lint gate exempts only this lint (`-A unsafe_code`) so intentional, justified unsafe
+# passes CI; a site silences the dev warning for production release with
+# `#[cfg_attr(not(debug_assertions), allow(unsafe_code))]` + a mandatory `// SAFETY:` comment.
+# Trusted-base crates should stay unsafe-free (may re-pin `unsafe_code = "forbid"` per-crate).
+unsafe_code = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+
+# Release arithmetic aligns with the never-silent honesty ethos (G2): trusted-kernel arithmetic
+# must panic on overflow, not silently wrap. Cargo disables overflow-checks in release by
+# default; we re-enable them so a release build fails loudly rather than producing a wrong value.
+[profile.release]
+overflow-checks = true

@@ -1,0 +1,25 @@
+[package]
+name = "mycelium-check"
+version = "0.0.0"
+description = "myc-check — the project-aware correctness/type-check driver (M-365; the prototype grows up). Resolves a mycelium-proj.toml project, checks the whole phylum/program, aggregates every refusal as an RFC-0013 diagnostic routed via the M-362 baseline, and exits non-zero on any error (CI-usable). Honest per-op tags preserved (VR-5); a refusal is explicit, never silent (G2). KC-3 — above the kernel; the trusted M-210 checker is unchanged."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# The trusted checker (M-210), the M-362 baseline routing, and the manifest layer. No new dependency.
+mycelium-l1 = { path = "../mycelium-l1" }
+mycelium-lsp = { path = "../mycelium-lsp" }
+mycelium-proj = { path = "../mycelium-proj" }
+# M-643: the shared CLI substrate (stdin-or-file `read_source`). In-workspace path dep, std-only —
+# no new external crate enters the tree (KC-3).
+mycelium-cli-common = { path = "../mycelium-cli-common" }
+
+[[bin]]
+name = "myc-check"
+path = "src/bin/myc-check.rs"

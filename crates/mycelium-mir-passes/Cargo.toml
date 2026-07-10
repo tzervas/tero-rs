@@ -1,0 +1,19 @@
+[package]
+name = "mycelium-mir-passes"
+version = "0.0.0"
+description = "MEM-4 (DN-33) — the RC-annotated IR + reference-counting lowering passes (static uniqueness analysis / Perceus-style RC emission and elision). Optimisation-only, OUTSIDE the trusted Core IR (KC-3): the Core IR (mycelium-core) stays pristine."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# Consumes the trusted Core IR (Node grammar) — read-only; never mutated.
+mycelium-core = { path = "../mycelium-core" }
+# RFC-0041 (Wave-1) shared recursion budget + guarded-stack leaf — closes the guard holes in
+# `emit_owned`/`count_occurrences` (RR-29 / §4.7). Downward-only (DN-68); never mutated.
+mycelium-workstack = { path = "../mycelium-workstack" }

@@ -1,0 +1,5 @@
+// nodule: geometry.shapes.circle
+// @updated: 2026-06-16
+nodule geometry.shapes.circle;
+
+fn r_unit() => Binary{8} = 0b0000_0001;

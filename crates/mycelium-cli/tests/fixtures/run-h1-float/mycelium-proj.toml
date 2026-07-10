@@ -1,0 +1,14 @@
+# Committed fixture for the enb Phase-I H1 capstone's float leg (M-914; E28-1). A single-nodule
+# phylum whose `main` composes the decimal float literal (M-897), `flt_mul`/`flt_add` (M-898), and
+# `flt_eq` (M-899) — kept as its own fixture (not folded into `run-h1-capstone`'s `and`-chain)
+# because every `flt.*` result is `Empirical`-tagged and `bit.and` refuses any non-`Exact` operand
+# (ADR-010/M-204) — see `run_h1_float.myc`'s doc comment.
+[project]
+name    = "run_h1_float"
+kind    = "phylum"
+version = "0.1.0"
+license = "MIT"
+summary = "run_h1_float — the enb H1 capstone's float leg `myc run` fixture (M-914)."
+
+[surface]
+exports = ["run_h1_float"]

@@ -1,0 +1,15 @@
+[package]
+name = "mycelium-dense"
+version = "0.0.0"
+description = "Dense paradigm operational surface: typed dim-tracked Dense{dim,dtype} values + embedding ops with honest per-op rounding bounds (RFC-0001 §4.1; RFC-0002 §5; M-230)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }

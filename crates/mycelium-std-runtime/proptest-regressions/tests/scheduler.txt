@@ -1,0 +1,7 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 454d42527ed2a6dc633e439c752496d1f17219d913325075e614eff45e4a49e9 # shrinks to occupancy = [0, 1], thief_seed = 660865090224527858

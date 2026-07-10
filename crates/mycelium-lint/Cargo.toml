@@ -1,0 +1,27 @@
+[package]
+name = "mycelium-lint"
+version = "0.0.0"
+description = "myc-lint — lint + auto-fix (M-366): surfaces the M-141 invariant lints + the header lints as ACTIONABLE, reified, opt-in fixes with a suggest/apply/scaffold boundary (a control-flow change is a scaffold, never auto-applied — RFC-0014 I1/I5). Hosts the M-363 §4.1 doc quality-bar lint (dormant-but-defined until the doc IR lands). No silent rewrite (G2). KC-3 — above the kernel; no new dependency."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# The M-141 lints + M-362 baseline (mycelium-lsp) and the parse/check/elaborate pipeline (mycelium-l1).
+mycelium-l1 = { path = "../mycelium-l1" }
+mycelium-lsp = { path = "../mycelium-lsp" }
+# The M-363 doc-IR + the §4.1 doc quality-bar lint, now ACTIVE (Wave B): the check-name set lives there
+# as the single source of truth, re-exported here as `DOC_QUALITY_CHECKS`. KC-3 — both above the kernel.
+mycelium-doc = { path = "../mycelium-doc" }
+# M-643: the shared CLI substrate (stdin-or-file `read_source`, the `.myc` `walk_myc`). In-workspace
+# path dep, std-only — no new external crate enters the tree (KC-3).
+mycelium-cli-common = { path = "../mycelium-cli-common" }
+
+[[bin]]
+name = "myc-lint"
+path = "src/bin/myc-lint.rs"

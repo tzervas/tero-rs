@@ -1,0 +1,5 @@
+// nodule: run_hello
+// @summary: `myc run` v0 fixture (M-908) — a nullary `main` in the evaluation-complete fragment.
+nodule run_hello;
+
+fn main() => Binary{8} = not(0b1010_1010);

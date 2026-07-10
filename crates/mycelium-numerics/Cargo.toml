@@ -1,0 +1,24 @@
+[package]
+name = "mycelium-numerics"
+version = "0.0.0"
+description = "Verified-numerics foundation: ErrorBound (ε, affine arithmetic) + ProbBound (δ, union/apRHL) kernels meeting at one shared {ε,δ,strength} certificate with a tier-i Rust checker (ADR-010; E2-4)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+# The guarantee lattice (meet), the Bound/BoundBasis vocabulary, NormKind — the shared certificate
+# reduces to core's {Bound, GuaranteeStrength} (ADR-010 §3; ADR-011).
+mycelium-core = { path = "../mycelium-core" }
+serde.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+# Property-based testing (proptest migration from hand-rolled LCG; M-654 Gate A3).
+# Version matches the workspace lockfile entry pulled in by mycelium-std-io (1.11.0).
+proptest = "1"

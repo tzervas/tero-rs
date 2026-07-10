@@ -1,0 +1,971 @@
+{
+  "tool": "mycelium-bench",
+  "profile": "release",
+  "mlir_dialect_feature": false,
+  "host_note": "host: x86_64-linux, 4 hw threads (provenance only)",
+  "honesty": {
+    "lattice": [
+      "Exact",
+      "Proven",
+      "Empirical",
+      "Declared"
+    ],
+    "rule": "Every measured number is Empirical (a trial mean with its trial count + spread); a capability loss / skip / runtime error is Declared. No verdict is Proven or Exact, and no performance target is pre-written (VR-5). A differential divergence from the trusted interpreter is a recorded correctness LOSS; an unlowerable node is a recorded capability LOSS (G2 — never omitted)."
+  },
+  "neutral_band": 0.1,
+  "run": {
+    "cases": [
+      {
+        "id": "bit-literal",
+        "fragment": "bit-subset",
+        "note": "a bare 8-bit literal — the most trivial kernel (spawn-bound for compiled paths)",
+        "src": "nodule d\nfn main() -> Binary{8} = 0b1011_0010",
+        "baseline_ns": 101.7878,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 21579.78455,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 21768.8929
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 5,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 39412.047,
+              "iters": 2000,
+              "batches": 5,
+              "ns_per_call_worst": 49394.3285
+            },
+            "compile_ns": 78907241.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 3,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 1286108.1,
+              "iters": 40,
+              "batches": 5,
+              "ns_per_call_worst": 1299060.2
+            },
+            "compile_ns": 122970698.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 0,
+              "reason": "process-spawn-bound: the per-invocation time is dominated by spawning a fresh native process, not kernel compute (M-602/E1) — expected for a trivial kernel vs the in-process interpreter"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "bit-not",
+        "fragment": "bit-subset",
+        "note": "single unary bit op",
+        "src": "nodule d\nfn main() -> Binary{8} = not(0b1011_0010)",
+        "baseline_ns": 1535.972,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 24563.85085,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 24862.20995
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 63,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 39261.69,
+              "iters": 2000,
+              "batches": 5,
+              "ns_per_call_worst": 40069.4335
+            },
+            "compile_ns": 82880741.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 39,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 1249583.9,
+              "iters": 40,
+              "batches": 5,
+              "ns_per_call_worst": 1255202.025
+            },
+            "compile_ns": 118850974.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 1,
+              "reason": "process-spawn-bound: the per-invocation time is dominated by spawning a fresh native process, not kernel compute (M-602/E1) — expected for a trivial kernel vs the in-process interpreter"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "bit-xor-not",
+        "fragment": "bit-subset",
+        "note": "a small straight-line bit pipeline (the xtask-e1 §2 shape)",
+        "src": "nodule d\nfn main() -> Binary{8} = not(xor(0b1011_0010, 0b1111_1111))",
+        "baseline_ns": 3872.56115,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 27700.30905,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 28495.5103
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 140,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 40369.099,
+              "iters": 2000,
+              "batches": 5,
+              "ns_per_call_worst": 41175.6025
+            },
+            "compile_ns": 89157009.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 96,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 1269383.075,
+              "iters": 40,
+              "batches": 5,
+              "ns_per_call_worst": 1281129.325
+            },
+            "compile_ns": 120448505.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 3,
+              "reason": "process-spawn-bound: the per-invocation time is dominated by spawning a fresh native process, not kernel compute (M-602/E1) — expected for a trivial kernel vs the in-process interpreter"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "bit-let-chain",
+        "fragment": "bit-subset",
+        "note": "let-bound straight-line bit computation (a few surface ops: not/xor only)",
+        "src": "nodule d\nfn main() -> Binary{8} =\n  let a = 0b1011_0010 in let b = xor(a, 0b0000_1111) in not(xor(b, a))",
+        "baseline_ns": 7615.9669,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 32717.76115,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 34653.54675
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 233,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 39501.7085,
+              "iters": 2000,
+              "batches": 5,
+              "ns_per_call_worst": 46157.753
+            },
+            "compile_ns": 79538163.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 193,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 1256200.2,
+              "iters": 40,
+              "batches": 5,
+              "ns_per_call_worst": 1301468.975
+            },
+            "compile_ns": 122671145.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 6,
+              "reason": "process-spawn-bound: the per-invocation time is dominated by spawning a fresh native process, not kernel compute (M-602/E1) — expected for a trivial kernel vs the in-process interpreter"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trit-neg",
+        "fragment": "bit-subset",
+        "note": "element-wise trit negation (the only trit op the MLIR-dialect path lowers)",
+        "src": "nodule d\nfn main() -> Ternary{4} = neg(<00+->)",
+        "baseline_ns": 1523.2632,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 24962.923,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 25091.4062
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 61,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 39733.557,
+              "iters": 2000,
+              "batches": 5,
+              "ns_per_call_worst": 40454.5015
+            },
+            "compile_ns": 82779179.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 38,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 1294803.325,
+              "iters": 40,
+              "batches": 5,
+              "ns_per_call_worst": 1339613.85
+            },
+            "compile_ns": 124434124.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 1,
+              "reason": "process-spawn-bound: the per-invocation time is dominated by spawning a fresh native process, not kernel compute (M-602/E1) — expected for a trivial kernel vs the in-process interpreter"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trit-add",
+        "fragment": "bit-subset",
+        "note": "balanced-ternary ripple-carry add (direct-LLVM lowers it; MLIR-dialect does NOT — a capability split)",
+        "src": "nodule d\nfn main() -> Ternary{4} = add(<00+->, <0+0->)",
+        "baseline_ns": 2177.48135,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 25316.1472,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 25574.41575
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 86,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 39268.386,
+              "iters": 2000,
+              "batches": 5,
+              "ns_per_call_worst": 39689.8295
+            },
+            "compile_ns": 82471632.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 55,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 1263254.925,
+              "iters": 40,
+              "batches": 5,
+              "ns_per_call_worst": 1282273.875
+            },
+            "compile_ns": 128387049.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 2,
+              "reason": "process-spawn-bound: the per-invocation time is dominated by spawning a fresh native process, not kernel compute (M-602/E1) — expected for a trivial kernel vs the in-process interpreter"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "swap-roundtrip",
+        "fragment": "swap",
+        "note": "a binary->ternary->binary certified round-trip (compiled paths route Swap to the interpreter — capability loss)",
+        "src": "nodule d\nfn main() -> Binary{8} =\n  let b = 0b0010_1010 in swap(swap(b, to: Ternary{6}, policy: rt), to: Binary{8}, policy: rt)",
+        "baseline_ns": 4387.69285,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 28527.6682,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 28804.395
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 154,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: swap to Ternary { trits: 6 } (the subset is straight-line bit/trit ops; M-301)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: swap to Ternary { trits: 6 } (the subset is straight-line bit/trit ops; M-301)"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: swap to Ternary { trits: 6 } (the subset is straight-line bit/trit ops; M-301)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: swap to Ternary { trits: 6 } (the subset is straight-line bit/trit ops; M-301)"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-match-repr",
+        "fragment": "data",
+        "note": "a flat non-recursive data match returning a repr — a data case the compiled backends MAY still lower (measured, not assumed)",
+        "src": "nodule d\ntype Sign = Neg | Zero | Pos\nfn label(s: Sign) -> Ternary{1} = match s { Neg => <->, Zero => <0>, _ => <+> }\nfn main() -> Ternary{1} = label(Zero)",
+        "baseline_ns": 1927.2637,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 25255.4014,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 25503.4682
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 76,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 40098.718,
+              "iters": 2000,
+              "batches": 5,
+              "ns_per_call_worst": 40791.815
+            },
+            "compile_ns": 87302425.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 48,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 1255482.2,
+              "iters": 40,
+              "batches": 5,
+              "ns_per_call_worst": 1410437.825
+            },
+            "compile_ns": 120315360.0,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 2,
+              "reason": "process-spawn-bound: the per-invocation time is dominated by spawning a fresh native process, not kernel compute (M-602/E1) — expected for a trivial kernel vs the in-process interpreter"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-construct",
+        "fragment": "data",
+        "note": "a datum result (the program evaluates to constructed data)",
+        "src": "nodule d\ntype Nat = Z | S(Nat)\nfn main() -> Nat = S(S(Z))",
+        "baseline_ns": 402.97485,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 23200.16795,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 23551.2948
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 17,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "data-nested-match",
+        "fragment": "data",
+        "note": "nested (Maranget) patterns returning a datum",
+        "src": "nodule d\ntype Nat = Z | S(Nat)\nfn pred2(n: Nat) -> Nat = match n { Z => Z, S(Z) => Z, S(S(m)) => m }\nfn main() -> Nat = pred2(S(S(S(Z))))",
+        "baseline_ns": 4544.85785,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 39298.6995,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 40312.6076
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 116,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "rec-self",
+        "fragment": "recursion",
+        "note": "self-recursion consuming a Nat (Fix + App + Match)",
+        "src": "nodule d\ntype Nat = Z | S(Nat)\nfn drop_(n: Nat) -> Nat = match n { Z => Z, S(m) => drop_(m) }\nfn main() -> Nat = drop_(S(S(S(Z))))",
+        "baseline_ns": 34438.76025,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 55794.4436,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 56565.16365
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 617,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "rec-build",
+        "fragment": "recursion",
+        "note": "self-recursion building data on the way back",
+        "src": "nodule d\ntype Nat = Z | S(Nat)\nfn copy(n: Nat) -> Nat = match n { Z => Z, S(m) => S(copy(m)) }\nfn main() -> Nat = copy(S(S(Z)))",
+        "baseline_ns": 57009.68985,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 48715.74885,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 51019.444
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-win",
+              "ratio_x1000": 1170
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "rec-mutual",
+        "fragment": "recursion",
+        "note": "mutual recursion (a FixGroup)",
+        "src": "nodule d\ntype Nat = Z | S(Nat)\nfn ping(n: Nat) -> Nat = match n { Z => Z, S(m) => pong(m) }\nfn pong(n: Nat) -> Nat = match n { Z => Z, S(m) => ping(m) }\nfn main() -> Nat = ping(S(S(Z)))",
+        "baseline_ns": 72766.26425,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 64406.5724,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 68470.5832
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-win",
+              "ratio_x1000": 1130
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: FixGroup: mutual recursion is not supported in Increment-3 (only single Fix with a λparam.Match body is supported; RFC-0004 §11.6; G2)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: FixGroup: mutual recursion is not supported in Increment-3 (only single Fix with a λparam.Match body is supported; RFC-0004 §11.6; G2)"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: FixGroup: mutual recursion is not supported in Increment-3 (only single Fix with a λparam.Match body is supported; RFC-0004 §11.6; G2)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: FixGroup: mutual recursion is not supported in Increment-3 (only single Fix with a λparam.Match body is supported; RFC-0004 §11.6; G2)"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "rec-fold",
+        "fragment": "recursion",
+        "note": "a `for` fold over a list spine (a synthesized Fix fold) returning a repr",
+        "src": "nodule d\ntype Bytes = End | More(Binary{8}, Bytes)\nfn checksum(bs: Bytes) -> Binary{8} = for b in bs, acc = 0b0000_0000 => xor(acc, b)\nfn main() -> Binary{8} = checksum(More(0b1111_0000, More(0b0000_1111, End)))",
+        "baseline_ns": 45131.68685,
+        "backends": [
+          {
+            "backend": "aot-env",
+            "outcome_status": "value",
+            "outcome_reason": "",
+            "timing": {
+              "ns_per_call": 179813.21195,
+              "iters": 20000,
+              "batches": 5,
+              "ns_per_call_worst": 187584.737
+            },
+            "compile_ns": null,
+            "verdict": {
+              "kind": "speed-loss",
+              "ratio_x1000": 251,
+              "reason": "slower than the in-process interpreter on this case (measured; no target — VR-5)"
+            }
+          },
+          {
+            "backend": "jit",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "direct-llvm",
+            "outcome_status": "unlowerable",
+            "outcome_reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "capability-loss",
+              "reason": "unsupported node for the AOT subset: Construct field: expected a repr lane but found a data value"
+            }
+          },
+          {
+            "backend": "mlir-dialect",
+            "outcome_status": "skipped",
+            "outcome_reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)",
+            "timing": null,
+            "compile_ns": null,
+            "verdict": {
+              "kind": "skipped",
+              "reason": "the `mlir-dialect` feature is off (build with --features mlir-dialect)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "llm": {
+    "source_path": "/home/user/mycelium/tools/llm-harness/reports/20260617T182214Z-report.json",
+    "is_synthetic": true,
+    "provenance": "mycelium-llm-validation v0.1.0 — run 20260617T182214Z — mode=mock — SYNTHETIC (fixture; not real model quality) (4 validations: 1 pass / 3 mock-pass / 0 skip / 0 fail)",
+    "validations": [
+      {
+        "id": "V-01-determinism",
+        "status": "mock-PASS",
+        "guarantee_tag": "Declared",
+        "wall_seconds": null,
+        "prompt_tokens": null,
+        "generated_tokens": null,
+        "message": "[MOCK] Determinism check simulated with fixture — not a real model run. Fixture outputs matched: True"
+      },
+      {
+        "id": "V-02-json-projection",
+        "status": "mock-PASS",
+        "guarantee_tag": "Declared",
+        "wall_seconds": null,
+        "prompt_tokens": null,
+        "generated_tokens": null,
+        "message": "[MOCK] JSON-projection check against fixture — not a real model run. Fixture parsed and validated OK"
+      },
+      {
+        "id": "V-03-tag-honesty",
+        "status": "PASS",
+        "guarantee_tag": null,
+        "wall_seconds": null,
+        "prompt_tokens": null,
+        "generated_tokens": null,
+        "message": "Tag-honesty gate PASSED. Correctly rejected 2 forbidden tag(s), correctly allowed 2 compliant tag(s). "
+      },
+      {
+        "id": "V-04-latency-tokens",
+        "status": "mock-PASS",
+        "guarantee_tag": "Declared",
+        "wall_seconds": 0.0,
+        "prompt_tokens": 12,
+        "generated_tokens": 3,
+        "message": "[MOCK] Latency/token report — synthetic numbers. wall_seconds=0.0 is a sentinel meaning 'not measured (mock mode)'. Prompt tokens and generated tokens are fixture values."
+      }
+    ]
+  }
+}

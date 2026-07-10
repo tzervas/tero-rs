@@ -1,0 +1,16 @@
+[package]
+name = "mycelium-std-select"
+version = "0.0.0"
+description = "std.select — selection DSL + mandatory EXPLAIN capability surface (M-519)."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+mycelium-core = { path = "../mycelium-core" }
+mycelium-select = { path = "../mycelium-select" }

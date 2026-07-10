@@ -1,0 +1,13 @@
+// nodule: run_h1_float
+// @summary: `myc run` H1 capstone, float leg (M-914) — the `Float` value form + `flt.*` ops.
+nodule run_h1_float;
+
+// `main` composes the decimal float literal (M-897) with `flt_mul`/`flt_add` (M-898) and checks
+// the result with `flt_eq` (M-899) — `(1.5 * 2.0) + 0.25 == 3.25`, bit-exact (mirroring
+// `flt_arith_composition_three_way` in `crates/mycelium-l1/tests/enablement.rs`). Kept as its OWN
+// entry (not folded into the `run-h1-capstone` `and`-chain — see that fixture's `main` doc comment
+// for why: `bit.and` refuses any non-`Exact` operand, and every `flt.*` result is `Empirical`,
+// ADR-040 §2.6) — a single `flt_eq` needs no composition, so the constraint never bites here. A
+// passing `myc run` renders `true`.
+fn main() => Binary{1} =
+  flt_eq(flt_add(flt_mul(1.5, 2.0), 0.25), 3.25);
