@@ -1,4 +1,4 @@
-# tero-rs container image — wraps the mycelium-tero fronts (tero-index/tero-http/tero-mcp/
+# tero-rs container image — wraps the tero fronts (tero-index/tero-http/tero-mcp/
 # tero-eval) built from this Cargo workspace. Primary consumer: tero-mcp (the MCP stdio front),
 # run as the image entrypoint; the other three bins ship alongside it in /usr/local/bin.
 #
@@ -6,7 +6,7 @@
 # four built binaries are copied into a slim Debian runtime image (no toolchain/source in the
 # shipped image).
 # WHY: the workspace pins rust-version = "1.96.1" (Cargo.toml [workspace.package]) as its MSRV;
-# the `rust:1` tag tracks current stable, which satisfies that floor. No crate in mycelium-tero's
+# the `rust:1` tag tracks current stable, which satisfies that floor. No crate in tero's
 # own dependency graph (mycelium-core/mycelium-l1/mycelium-doc/mycelium-vsa) uses a nightly
 # `#![feature(...)]` gate (verified: grep for `feature(` across those crates found none), so a
 # stable-toolchain image builds it cleanly.
@@ -17,7 +17,7 @@
 FROM rust:1-bookworm AS builder
 WORKDIR /build
 COPY . .
-RUN cargo build --release -p mycelium-tero
+RUN cargo build --release -p tero
 
 FROM debian:bookworm-slim AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \

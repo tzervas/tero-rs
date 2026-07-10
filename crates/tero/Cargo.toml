@@ -1,21 +1,20 @@
 [package]
-name = "mycelium-tero"
-# WHAT: version 0.0.0 -> 0.1.0 -> 0.1.1 for the tero-facing crate (this publish pass).
-# WHY: 0.1.0 aligned the extracted crate with the chore/semver-baseline-v0.1.0 repo tag. This pass
-# (verified: cargo build --release -p mycelium-tero green, cargo test -p mycelium-tero 112/112
-# green, cargo clippy -p mycelium-tero --all-targets -D warnings clean) is fixes-only relative to
-# that baseline — hygiene (scripts/check.sh, git-secrets), two clippy-driven bugfixes in
-# mycelium-core/mycelium-l1 (dependencies of this crate), docs/tero-index bootstrap — no API or
-# behavior change to the shipped bins (tero-index/tero-http/tero-mcp/tero-eval). Semver: patch.
-# Also brings tero-rs to parity with the python siblings (tero-mcp/cabal already at 0.1.1).
-# WHY NOT 1.0.0: tero-rs/mycelium-tero is kernel for extracted toolchain (not standalone product);
+name = "tero"
+# WHAT: version 0.0.0 -> 0.1.0 -> 0.1.1 -> 0.1.2 for this crate (renamed mycelium-tero -> tero).
+# WHY 0.1.2: this pass RENAMES the public crate `mycelium-tero` -> `tero` (dir crates/mycelium-tero
+# -> crates/tero; `use mycelium_tero::` -> `tero::`; identity strings + their test asserts). A public
+# crate-name rename is observable to consumers (downstream tero-mcp now depends on `tero`), so it is
+# reflected in semver as a patch bump; the shipped binary BEHAVIOR is unchanged from 0.1.1.
+# Verified: cargo build --release -p tero green, cargo test -p tero green (113 tests), cargo clippy
+# -p tero --all-targets -D warnings clean.
+# WHY NOT 1.0.0: tero-rs/tero is the kernel for the extracted toolchain (not a standalone product);
 # full 1.0 requires wave criteria not yet met (green checks ACROSS the whole workspace — a
 # workspace-wide `cargo clippy --workspace -D warnings` still fails in an unrelated 0.0.0 stub crate,
 # mycelium-std-cmp, outside this crate's dependency tree; a nightly-toolchain unstable_name_collisions
 # lint, not a real defect, but still unresolved), cabal positive cited assess, hardened fronts,
 # release artifacts, VSA notes in ROADMAP. Other internal crates stay 0.0.0. C0-honest.
-version = "0.1.1"
-description = "mycelium-tero — the transparent memory substrate & agent knowledge API (DN-87 / E39-1): the corpus as a generated, provenance-carrying encoding (deterministic structured index + a VSA semantic layer), served platform-agnostically. Named in quiet homage to Atsushi Tero, for his contribution to science and engineering."
+version = "0.1.2"
+description = "tero — the transparent memory substrate & agent knowledge API (DN-87 / E39-1): the corpus as a generated, provenance-carrying encoding (deterministic structured index + a VSA semantic layer), served platform-agnostically. Named in quiet homage to Atsushi Tero, for his contribution to science and engineering."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -44,7 +43,7 @@ serde_json = { workspace = true }
 tokio = { workspace = true, features = ["rt-multi-thread", "macros", "net", "sync", "io-util"] }
 axum = { workspace = true }
 # M-1018 (DN-87 §2.1/§6.1): Layer 2 — the VSA semantic layer. A downward tools->core edge
-# (mycelium-tero is deps-strata tier 7; mycelium-vsa depends only on mycelium-core), tier-legal.
+# (tero is deps-strata tier 7; mycelium-vsa depends only on mycelium-core), tier-legal.
 # Only the MAP-I algebra + the cleanup/capacity/empirical-profile substrate is needed: encode each
 # Layer-1 row as a role-filler bind+bundle record, retrieve via cleanup. The resonator/decode-select
 # factor path (mycelium-vsa-decode) is deliberately NOT pulled in — a variable-arity role-filler

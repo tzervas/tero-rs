@@ -49,7 +49,7 @@ async fn identify_and_query_answer_are_200_with_the_shared_envelope() {
     let st = app("http-ok");
     let (s, body) = call(&st, "GET", "/v1/identify", Some("reader")).await;
     assert_eq!(s, StatusCode::OK);
-    assert_eq!(body["name"], "mycelium-tero");
+    assert_eq!(body["name"], "tero");
 
     let (s, body) = call(&st, "GET", "/v1/query?kind=id&value=M-0099", Some("reader")).await;
     assert_eq!(s, StatusCode::OK);

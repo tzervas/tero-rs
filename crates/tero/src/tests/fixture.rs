@@ -108,7 +108,7 @@ pub(crate) fn write_corpus(root: &Path, defects: bool) -> Expected {
          \x20   depends_on: [M-0001, M-0002]\n\
          \x20   doc_refs:\n\
          \x20     - corpus:RFC-0099\n\
-         \x20     - src:crates/mycelium-tero/src/lib.rs\n\
+         \x20     - src:crates/tero/src/lib.rs\n\
          \x20   body: |\n\
          \x20     The body first line becomes the summary.\n\
          \x20     A second body line ignored.\n\

@@ -4,15 +4,24 @@
 
 The Rust kernel and binary fronts for Tero (Layer-1 index + query engine, DN-87; M-1016/M-1017).
 
-This is the supporting extraction of `mycelium-tero` + related crates (the transparent memory substrate) from the larger Mycelium workspace. It powers:
+This is the supporting extraction of the `tero` crate + related crates (the transparent memory substrate) from the larger Mycelium workspace. It powers:
 
 - `tero-mcp` (Rust `tero-mcp` bin + Python `tero-mcp-lite` presenter)
 - tero-index / tero-http / tero-eval bins
 - Dynamic tool surface for MCP consumers (cabal-devmelopner, agents)
 
-See [crates/mycelium-tero](crates/mycelium-tero) for the core implementation and fronts.
+See [crates/tero](crates/tero) for the core implementation and fronts.
 
 **Companion projects (toolchain tranche):** tero-mcp, cabal-devmelopner.
+
+## About the name
+
+**Tero** is named for **Atsushi Tero**, whose slime-mold (*Physarum polycephalum*) experiments
+showed that a simple organism, with no central controller, grows near-optimal transport networks —
+famously reconstructing a network resembling the Tokyo rail map by connecting food sources with
+efficient, fault-tolerant routes. The name fits: Tero's job is to *route to the relevant
+information* — its indexing and search optimize the path from a query to the citations that answer
+it, a conceptually similar route-finding-over-a-network optimization.
 
 ## Quick start (hygiene + tero)
 ```bash
@@ -32,11 +41,12 @@ Part of `tooling-1.0-readiness-2026-07-10` wave (priority 1: Toolchain Core).
 
 See docs/ROADMAP.md and CHANGELOG.md .
 
-**Current versions:** workspace crates at 0.0.0 baseline; `mycelium-tero` (the shipped tero fronts:
-`tero-index`/`tero-http`/`tero-mcp`/`tero-eval`) at **0.1.1**, released as `v0.1.1` (git tag +
-`gh release` + GHCR `ghcr.io/tzervas/tero-rs:0.1.1`). 1.0.0 is not yet justified — see
-docs/ROADMAP.md for the remaining criteria (full-workspace clippy clean, cabal positive assess,
-hardened fronts).
+**Current versions:** workspace crates at 0.0.0 baseline; the `tero` crate (formerly
+`mycelium-tero`; the shipped fronts `tero-index`/`tero-http`/`tero-mcp`/`tero-eval`) at **0.1.2**,
+released as `v0.1.2` (git tag + `gh release` + GHCR `ghcr.io/tzervas/tero-rs:0.1.2`). The 0.1.2 bump
+reflects the public crate rename `mycelium-tero` → `tero`; binary behavior is unchanged from 0.1.1.
+1.0.0 is not yet justified — see docs/ROADMAP.md for the remaining criteria (full-workspace clippy
+clean, cabal positive assess, hardened fronts).
 
 License: MIT (per workspace).
 

@@ -1,4 +1,4 @@
-//! `tero-http` — the HTTP/JSON front for the mycelium-tero memory engine (M-1017 / DN-87 §2.3).
+//! `tero-http` — the HTTP/JSON front for the tero memory engine (M-1017 / DN-87 §2.3).
 //! Serves the M-1016 query engine over a plain, versioned, curl-able HTTP API (the universal floor
 //! for any agent platform). Token-scoped, read-only by default.
 //!
@@ -18,7 +18,7 @@ use std::path::PathBuf;
 use std::process::ExitCode;
 use std::sync::Arc;
 
-use mycelium_tero::{load_report, serve_http, AppState, TokenTable};
+use tero::{load_report, serve_http, AppState, TokenTable};
 
 const EX_OK: u8 = 0;
 const EX_USAGE: u8 = 64;

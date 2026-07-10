@@ -1,4 +1,4 @@
-//! `tero-mcp` — the MCP (Model Context Protocol) front for the mycelium-tero memory engine
+//! `tero-mcp` — the MCP (Model Context Protocol) front for the tero memory engine
 //! (M-1017 / DN-87 §2.3). Speaks newline-delimited JSON-RPC 2.0 over stdio, so an MCP client
 //! launches it as a subprocess and calls its tools natively. Token-scoped, read-only by default.
 //!
@@ -13,8 +13,8 @@
 use std::path::PathBuf;
 use std::process::ExitCode;
 
-use mycelium_tero::{load_report, serve_mcp_stdio, tool_descriptors, TokenTable, SERVER_NAME};
 use serde_json::json;
+use tero::{load_report, serve_mcp_stdio, tool_descriptors, TokenTable, SERVER_NAME};
 
 const EX_OK: u8 = 0;
 const EX_USAGE: u8 = 64;

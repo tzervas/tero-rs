@@ -19,10 +19,10 @@ if command -v cargo >/dev/null 2>&1; then
   echo "=== tero-rs cargo fmt/clippy/check (targeted) ==="
   cargo fmt -- --check || (echo "fmt issues"; [[ "$MODE" == "--fix" ]] && cargo fmt)
   cargo clippy --workspace -- -D warnings || echo "WARN: clippy warnings (review for 1.0 hardening)"
-  # Target tero-relevant (history: mycelium-tero bin or specific crates for the extracted tero functionality)
-  cargo check -p mycelium-tero 2>/dev/null || cargo check --workspace --message-format short | head -20
+  # Target tero-relevant (history: tero bin or specific crates for the extracted tero functionality)
+  cargo check -p tero 2>/dev/null || cargo check --workspace --message-format short | head -20
   if [[ "$MODE" != "--quick" ]]; then
-    cargo test -p mycelium-tero -- --quiet 2>/dev/null || echo "INFO: no dedicated mycelium-tero tests or skipped in this extraction view"
+    cargo test -p tero -- --quiet 2>/dev/null || echo "INFO: no dedicated tero tests or skipped in this extraction view"
   fi
 else
   echo "cargo not found; skipping Rust checks"

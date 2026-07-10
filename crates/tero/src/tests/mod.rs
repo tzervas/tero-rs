@@ -30,5 +30,5 @@ mod vsa2_explain;
 #[test]
 fn summary_names_the_crate_and_its_dn() {
     let s = crate_summary();
-    assert!(s.contains("mycelium-tero") && s.contains("DN-87"));
+    assert!(s.contains("tero") && s.contains("DN-87"));
 }

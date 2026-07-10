@@ -1,5 +1,5 @@
 //! `tero-eval` — the Layer-2 **eval harness runner** (M-1018 / DN-87 §6.1). Loads the committed
-//! question set + the committed Layer-1 index, runs [`mycelium_tero::run_eval`] (Layer-2 VSA vs the
+//! question set + the committed Layer-1 index, runs [`tero::run_eval`] (Layer-2 VSA vs the
 //! Layer-1 baseline), prints correctness/provenance/latency **with denominators + seed + host tag**,
 //! and records the **append-only gate verdict** — writing the machine `eval/verdict.json`, the fresh
 //! `eval/latency-baseline.json`, and appending the human `eval/VERDICT.md`.
@@ -19,7 +19,7 @@
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
-use mycelium_tero::{
+use tero::{
     latency_classify, load_report, run_eval, EvalReport, EvalSuite, GateVerdict, LatencyBaseline,
     LatencyEntry,
 };

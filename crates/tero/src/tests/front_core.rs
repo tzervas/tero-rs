@@ -113,11 +113,9 @@ fn cite_and_explain_views_project_the_answer() {
 #[test]
 fn identify_reports_the_engine_and_the_gated_layer2() {
     let v = identify_value(false);
-    assert_eq!(v["name"], "mycelium-tero");
+    assert_eq!(v["name"], "tero");
     assert_eq!(v["layer2_enabled"], false);
-    assert!(v["summary"]
-        .as_str()
-        .is_some_and(|s| s.contains("mycelium-tero")));
+    assert!(v["summary"].as_str().is_some_and(|s| s.contains("tero")));
     assert!(v["operations"].as_array().is_some_and(|a| a.len() == 9));
     assert!(v["siblings"].as_array().is_some_and(|a| !a.is_empty()));
 }

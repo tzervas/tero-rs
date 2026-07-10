@@ -169,7 +169,7 @@ fn initialize_result(state: &McpState) -> Value {
         "serverInfo": { "name": SERVER_NAME, "version": env!("CARGO_PKG_VERSION") },
         "capabilities": { "tools": { "listChanged": false } },
         "instructions": format!(
-            "mycelium-tero memory API ({}). tools/list, then tools/call with a `token` argument \
+            "tero memory API ({}). tools/list, then tools/call with a `token` argument \
              (from TERO_TOKENS). Every answer carries resolvable citations + an EXPLAIN trace; a \
              query that finds nothing citable is a typed refusal, not an empty answer. Layer-2 \
              (VSA) is {}.",

@@ -1,4 +1,4 @@
-//! mycelium-tero — the transparent memory substrate & agent knowledge API (DN-87 / E39-1).
+//! tero — the transparent memory substrate & agent knowledge API (DN-87 / E39-1).
 //!
 //! **M-1015 (this crate's first landed engine): Layer 1 — the deterministic, drift-gated structured
 //! index over the WHOLE corpus.** It generalizes the proven `docs/api-index/` + `docs/lib-index/`
@@ -90,7 +90,7 @@ pub use vsa2::{Layer2Answer, Layer2Explain, Layer2Index, Layer2Refusal, TERO_L2_
 /// The program's one-line summary, used by the (future) API fronts' identify endpoint.
 #[must_use]
 pub fn crate_summary() -> &'static str {
-    "mycelium-tero: the transparent memory substrate & agent knowledge api (DN-87; Layer-1 index + \
+    "tero: the transparent memory substrate & agent knowledge api (DN-87; Layer-1 index + \
      query engine)"
 }
 

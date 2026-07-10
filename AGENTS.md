@@ -2,13 +2,13 @@
 
 **Tero-first (mandatory):** Start every analysis, edit, or assessment with tero (MCP `tero__*` or `/root/git/scripts/tero.sh tero-rs <tool> ...`). Cite every answer (citations + EXPLAIN on demand).
 
-This repo is the Rust implementation of the tero query engine + MCP/HTTP fronts (Layer-1 primary; Layer-2 VSA gated). See crates/mycelium-tero/src/ and the bin/ frontends.
+This repo is the Rust implementation of the tero query engine + MCP/HTTP fronts (Layer-1 primary; Layer-2 VSA gated). See crates/tero/src/ and the bin/ frontends.
 
 ## Key references (from tero + wave)
 - tooling-1.0-readiness-2026-07-10 wave (P1 toolchain): tero-rs, tero-mcp, cabal-devmelopner.
 - plan.md (gaps, semver baseline, hygiene).
 - dev-docs/WORKSPACE_CABAL_TERO_READINESS.md
-- crates/mycelium-tero/Cargo.toml and src/ (M-1016/1017/1018 notes in comments).
+- crates/tero/Cargo.toml and src/ (M-1016/1017/1018 notes in comments).
 - tero-mcp docs/ (the Python side + generator).
 
 ## Usage for agents
@@ -23,7 +23,7 @@ Never silent (C0): refusals from tero when no citable rows are explicit.
 ## Branch / hygiene / land
 - Working branch only: e.g. feature/1.0-readiness (evolved from chore/semver-baseline-v0.1.0).
 - Always: `./scripts/check.sh` (or --fix) before commit/land.
-- cargo test/clippy targeted on mycelium-tero + fronts.
+- cargo test/clippy targeted on tero + fronts.
 - Append-only: docs/CHANGELOG.md, AGENTS.md, ROADMAP, this wave refs.
 - Google-style comments on all code/docs changes: WHAT / WHY / WHY NOT other options.
 - PR: feature/... → dev (pr-review adapted), dev → main --no-ff.

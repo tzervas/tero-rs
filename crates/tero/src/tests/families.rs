@@ -86,7 +86,7 @@ fn fixture_extracts_status_guarantee_and_issue_fields() {
     assert_eq!(issue.depends_on, vec!["M-0001", "M-0002"]);
     assert_eq!(
         issue.doc_refs,
-        vec!["corpus:RFC-0099", "src:crates/mycelium-tero/src/lib.rs"]
+        vec!["corpus:RFC-0099", "src:crates/tero/src/lib.rs"]
     );
     assert_eq!(issue.gh_issue.as_deref(), Some("4242")); // from idmap.tsv
     assert_eq!(

@@ -198,7 +198,7 @@ fn refusal_envelope(refusal: &Refusal) -> Value {
 /// and the sibling indices, so a client learns the whole memory surface in one call.
 pub(crate) fn identify_value(layer2_enabled: bool) -> Value {
     json!({
-        "name": "mycelium-tero",
+        "name": "tero",
         "summary": crate::crate_summary(),
         "version": env!("CARGO_PKG_VERSION"),
         "engine": "M-1016 QueryEngine over the Layer-1 tero-index (docs/tero-index/index.json)",

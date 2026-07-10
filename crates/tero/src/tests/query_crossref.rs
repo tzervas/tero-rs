@@ -4,7 +4,7 @@
 //!
 //! Fixture wiring this exercises (`fixture::write_corpus`, `defects=false`): the issue `E99-1`
 //! `depends_on: [M-0099]`; `M-0099` `depends_on: [M-0001, M-0002]` (neither indexed — unresolved)
-//! and `doc_refs: [corpus:RFC-0099, src:crates/mycelium-tero/src/lib.rs]` (the first resolves to the
+//! and `doc_refs: [corpus:RFC-0099, src:crates/tero/src/lib.rs]` (the first resolves to the
 //! RFC-0099 document row, the second is an unresolvable `src:` reference).
 
 use crate::query::resolve_doc_ref;
@@ -96,7 +96,7 @@ fn depth_two_reaches_the_doc_refs_target_and_records_unresolved_edges() {
         explain
             .unresolved_edges
             .iter()
-            .any(|e| e.contains("src:crates/mycelium-tero/src/lib.rs")),
+            .any(|e| e.contains("src:crates/tero/src/lib.rs")),
         "{:?}",
         explain.unresolved_edges
     );
@@ -240,7 +240,7 @@ fn resolve_doc_ref_returns_none_for_api_and_src_refs_never_a_wrong_guess() {
         flagged: Vec::new(),
     };
     assert!(resolve_doc_ref(&report, "api:mycelium-core::foo::bar").is_none());
-    assert!(resolve_doc_ref(&report, "src:crates/mycelium-tero/src/lib.rs").is_none());
+    assert!(resolve_doc_ref(&report, "src:crates/tero/src/lib.rs").is_none());
     assert!(resolve_doc_ref(&report, "corpus:RFC-9999").is_none());
 }
 

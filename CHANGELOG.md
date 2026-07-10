@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-07-10
+
+### Changed (rebrand — public crate rename)
+- Renamed the public crate `mycelium-tero` → **`tero`** (and the directory `crates/mycelium-tero`
+  → `crates/tero`; all `use mycelium_tero::…` paths → `tero::…`; the `identify`/`crate_summary`
+  server-identity strings and their test assertions; all docs/comment prose). The binary names are
+  unchanged (`tero-mcp`/`tero-http`/`tero-index`/`tero-eval` — already tero-prefixed) and the MCP
+  protocol server name stays `tero-mcp`. WHY: the extracted project is "Tero"; carrying the
+  `mycelium-` prefix on the crate was a leftover from the monorepo. WHY a patch bump (0.1.1 →
+  0.1.2), not 0.1.1-stands: renaming the public crate name is an observable change to consumers
+  (downstream `tero-mcp` now depends on `tero`, not `mycelium-tero`), so it is reflected in semver;
+  but the shipped binary *behavior* is identical to 0.1.1.
+- Added an "About the name" etymology note to the README: **Tero** honors Atsushi Tero, whose
+  slime-mold (*Physarum*) experiments grew near-optimal transport networks (the Tokyo-rail-map
+  result) — a fitting nod because Tero's indexing/search optimizes the route from a query to the
+  relevant citations. (The crate `description` already carried a homage line; the README now states
+  it plainly.)
+- Removed a stray tracked `Cargo.toml.bak` backup (cruft).
+- Test suite: added targeted regression + e2e tests during the same polish pass — parameterized
+  hex byte-decode regression (mycelium-core, the `as_chunks` fix), parameterized seq-literal length
+  regression (mycelium-l1, the `unwrap_or` fix), and a real-committed-index end-to-end test (`tero`:
+  every citation's `file:line` resolves on disk, with engine/HTTP/MCP parity on real data).
+
+### Verified
+- `cargo build --release -p tero` green; `cargo test -p tero --release` green; `cargo clippy -p tero
+  --all-targets -- -D warnings` clean. `cargo build --release --workspace` green. (The unrelated
+  full-workspace `cargo clippy --workspace -- -D warnings` finding in the 0.0.0 stub crate
+  `mycelium-std-cmp` — outside `tero`'s dependency graph — remains, and is why this is 0.1.2, not
+  1.0.0.) Note: `mycelium-l1`'s own test *suite* cannot run in this extraction (`include_str!` of
+  `lib/*.myc` fixtures that were not copied over) — a pre-existing extraction gap, independent of
+  the rename; the `tero` product and its dependency *libraries* build and test green.
+
 ## [0.1.1] - 2026-07-10
 
 ### Verified stable + published

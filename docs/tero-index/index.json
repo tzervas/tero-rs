@@ -64,6 +64,26 @@
       "summary": "Use cabal-devmelopner from inside:"
     },
     {
+      "anchor": "agents--secrets-.env-and-git-secrets-protection-2026-07-10-tooling-1.0-wave",
+      "family": "doc",
+      "kind": "section",
+      "title": "Secrets, .env and git-secrets protection (2026-07-10, tooling 1.0 wave)",
+      "file": "AGENTS.md",
+      "line": 46,
+      "tag": "Empirical/Declared",
+      "summary": "WHAT:"
+    },
+    {
+      "anchor": "agents--then-verify",
+      "family": "doc",
+      "kind": "other",
+      "title": "then verify",
+      "file": "AGENTS.md",
+      "line": 61,
+      "tag": "Empirical/Declared",
+      "summary": "git secrets --scan"
+    },
+    {
       "anchor": "readme",
       "family": "doc",
       "kind": "other",
@@ -75,12 +95,22 @@
       "summary": "Status: Extracted toolchain core (2026-07-10)"
     },
     {
+      "anchor": "readme--about-the-name",
+      "family": "doc",
+      "kind": "section",
+      "title": "About the name",
+      "file": "README.md",
+      "line": 17,
+      "tag": "Empirical/Declared",
+      "summary": "Tero is named for Atsushi Tero, whose slime-mold (Physarum polycephalum) experiments"
+    },
+    {
       "anchor": "readme--quick-start-hygiene-tero",
       "family": "doc",
       "kind": "section",
       "title": "Quick start (hygiene + tero)",
       "file": "README.md",
-      "line": 17,
+      "line": 26,
       "tag": "Empirical/Declared",
       "summary": "cd tero-rs"
     },
@@ -90,7 +120,7 @@
       "kind": "other",
       "title": "After docs: /root/git/scripts/update-tero.sh tero-rs",
       "file": "README.md",
-      "line": 21,
+      "line": 30,
       "tag": "Empirical/Declared",
       "summary": "Use tero MCP or /root/git/scripts/tero.sh tero-rs ... (after index) for all design/roadmap/historic context. See AGENTS.md."
     },
@@ -100,7 +130,7 @@
       "kind": "other",
       "title": "Query: /root/git/scripts/tero.sh tero-rs text_search \"...\"",
       "file": "README.md",
-      "line": 22,
+      "line": 31,
       "tag": "Empirical/Declared",
       "summary": "Use tero MCP or /root/git/scripts/tero.sh tero-rs ... (after index) for all design/roadmap/historic context. See AGENTS.md."
     },
@@ -110,7 +140,7 @@
       "kind": "section",
       "title": "Tero-first",
       "file": "README.md",
-      "line": 25,
+      "line": 34,
       "tag": "Empirical/Declared",
       "summary": "Use tero MCP or /root/git/scripts/tero.sh tero-rs ... (after index) for all design/roadmap/historic context. See AGENTS.md."
     },
@@ -120,7 +150,7 @@
       "kind": "section",
       "title": "1.0 Readiness",
       "file": "README.md",
-      "line": 29,
+      "line": 38,
       "tag": "Empirical/Declared",
       "summary": "Part of tooling-1.0-readiness-2026-07-10 wave (priority 1: Toolchain Core)."
     },
@@ -193,7 +223,57 @@
       "file": "CHANGELOG.md",
       "line": 8,
       "tag": "Empirical/Declared",
-      "summary": "- scripts/check.sh (targeted cargo fmt/clippy/check/test on mycelium-tero; --fix/--quick support). WHAT: hygiene gate matching sibling projects. WHY: wave requ…"
+      "summary": "- Renamed the public crate mycelium-tero → tero (and the directory crates/mycelium-tero"
+    },
+    {
+      "anchor": "changelog--0.1.2-2026-07-10",
+      "family": "changelog",
+      "kind": "section",
+      "title": "[0.1.2] - 2026-07-10",
+      "file": "CHANGELOG.md",
+      "line": 10,
+      "tag": "Empirical/Declared",
+      "summary": "- Renamed the public crate mycelium-tero → tero (and the directory crates/mycelium-tero"
+    },
+    {
+      "anchor": "changelog--changed-rebrand-public-crate-rename",
+      "family": "changelog",
+      "kind": "section",
+      "title": "Changed (rebrand — public crate rename)",
+      "file": "CHANGELOG.md",
+      "line": 12,
+      "tag": "Empirical/Declared",
+      "summary": "- Renamed the public crate mycelium-tero → tero (and the directory crates/mycelium-tero"
+    },
+    {
+      "anchor": "changelog--verified",
+      "family": "changelog",
+      "kind": "section",
+      "title": "Verified",
+      "file": "CHANGELOG.md",
+      "line": 33,
+      "tag": "Empirical/Declared",
+      "summary": "- cargo build --release -p tero green; cargo test -p tero --release green; cargo clippy -p tero"
+    },
+    {
+      "anchor": "changelog--0.1.1-2026-07-10",
+      "family": "changelog",
+      "kind": "section",
+      "title": "[0.1.1] - 2026-07-10",
+      "file": "CHANGELOG.md",
+      "line": 42,
+      "tag": "Empirical/Declared",
+      "summary": "- Real gate run (not claimed): cargo build --release -p mycelium-tero green;"
+    },
+    {
+      "anchor": "changelog--verified-stable-published",
+      "family": "changelog",
+      "kind": "section",
+      "title": "Verified stable + published",
+      "file": "CHANGELOG.md",
+      "line": 44,
+      "tag": "Empirical/Declared",
+      "summary": "- Real gate run (not claimed): cargo build --release -p mycelium-tero green;"
     },
     {
       "anchor": "changelog--0.1.0-2026-07-10",
@@ -201,7 +281,7 @@
       "kind": "section",
       "title": "[0.1.0] - 2026-07-10",
       "file": "CHANGELOG.md",
-      "line": 10,
+      "line": 63,
       "tag": "Empirical/Declared",
       "summary": "- scripts/check.sh (targeted cargo fmt/clippy/check/test on mycelium-tero; --fix/--quick support). WHAT: hygiene gate matching sibling projects. WHY: wave requ…"
     },
@@ -211,7 +291,7 @@
       "kind": "section",
       "title": "Added (for 1.0 readiness)",
       "file": "CHANGELOG.md",
-      "line": 12,
+      "line": 65,
       "tag": "Empirical/Declared",
       "summary": "- scripts/check.sh (targeted cargo fmt/clippy/check/test on mycelium-tero; --fix/--quick support). WHAT: hygiene gate matching sibling projects. WHY: wave requ…"
     },
@@ -221,7 +301,7 @@
       "kind": "section",
       "title": "Changed",
       "file": "CHANGELOG.md",
-      "line": 18,
+      "line": 71,
       "tag": "Empirical/Declared",
       "summary": "- Ran ./scripts/check.sh --fix: applied fmt (line wraps, import order in mycelium-tero/src/{bin/tero-mcp.rs, front/mcp.rs, lib.rs}). WHAT: clean hygiene run. W…"
     },
@@ -231,7 +311,7 @@
       "kind": "section",
       "title": "Cited",
       "file": "CHANGELOG.md",
-      "line": 23,
+      "line": 76,
       "tag": "Empirical/Declared",
       "summary": "- Tero-first actions: /root/git/scripts/tero.sh tero-mcp/cabal-devmelopner/dev-docs identify + textsearch for \"tero semver 1.0 readiness tooling cabal\", \"chore…"
     },
@@ -241,7 +321,7 @@
       "kind": "section",
       "title": "Verification",
       "file": "CHANGELOG.md",
-      "line": 29,
+      "line": 82,
       "tag": "Empirical/Declared",
       "summary": "- Hygiene: check.sh green (fmt fixed, tests ok)."
     }

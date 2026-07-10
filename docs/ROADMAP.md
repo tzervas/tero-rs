@@ -14,9 +14,9 @@ Companion: [../AGENTS.md](../AGENTS.md), tero-mcp/docs/ROADMAP.md
 
 ## Current State (Tero-cited + surveys)
 - On feature/1.0-readiness (evolved chore/semver-baseline-v0.1.0).
-- Hygiene: scripts/check.sh present + passing (fmt/clippy/test targeted to mycelium-tero).
+- Hygiene: scripts/check.sh present + passing (fmt/clippy/test targeted to tero).
 - Tero index: bootstrapped (requires root md files for items >0).
-- Semver: workspace + mycelium-tero at 0.0.0 (baseline chore); bumping key crates toward 0.1.0 with rationale (see CHANGELOG).
+- Semver: workspace + tero at 0.0.0 (baseline chore); bumping key crates toward 0.1.0 with rationale (see CHANGELOG).
 - Gaps vs wave (from cabal attempt + tero): empty index initially blocked cabal assess; missing root docs/AGENTS/README (now added); no top-level version in Cargo for "tero-rs" project view; limited dedicated tests in front (relies on integration in tero-mcp + consumers).
 
 ## Waves / Steps for Toolchain P1
