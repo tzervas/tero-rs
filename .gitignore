@@ -15,3 +15,20 @@ Thumbs.db
 
 # Misc
 *.log
+
+# Local secrets / environment variables — never commit real credentials
+# WHAT: .env files contain XAI_API_KEY (used by cabal-devmelopner --provider xai) and future provider keys (Claude, ADK, etc.).
+# WHY: Prevents leaking secrets into git history. Required for 1.0 hardened release criteria and security-mcp scans. Complements git-secrets hook.
+# WHY NOT: .env.example / .env.template are explicitly allowed for contributor setup.
+# Setup: See AGENTS.md for git-secrets --install + patterns. Run `git secrets --scan` in hygiene.
+# =============================================================================
+.env
+.env.local
+.env.*.local
+.envrc
+*.env
+!.env.example
+!.env.template
+!.env.sample
+*.key
+secrets/

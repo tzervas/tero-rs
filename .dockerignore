@@ -1,0 +1,5 @@
+# Keep the build context small — the workspace Cargo build doesn't need any of this inside
+# the container build context (it's still available on the host for cargo's own caching).
+target/
+.git/
+*.log

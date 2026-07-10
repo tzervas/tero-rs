@@ -386,29 +386,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "mycelium-bench"
-version = "0.0.0"
-dependencies = [
- "mycelium-cert",
- "mycelium-core",
- "mycelium-interp",
- "mycelium-l1",
- "mycelium-mlir",
- "mycelium-std-runtime",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "mycelium-build"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "mycelium-cert"
 version = "0.0.0"
 dependencies = [
@@ -419,31 +396,6 @@ dependencies = [
  "serde",
  "serde_json",
 ]
-
-[[package]]
-name = "mycelium-check"
-version = "0.0.0"
-dependencies = [
- "mycelium-cli-common",
- "mycelium-l1",
- "mycelium-lsp",
- "mycelium-proj",
-]
-
-[[package]]
-name = "mycelium-cli"
-version = "0.0.0"
-dependencies = [
- "mycelium-cli-common",
- "mycelium-interp",
- "mycelium-l1",
- "mycelium-proj",
- "mycelium-spore",
-]
-
-[[package]]
-name = "mycelium-cli-common"
-version = "0.0.0"
 
 [[package]]
 name = "mycelium-core"
@@ -462,16 +414,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "mycelium-diag"
-version = "0.0.0"
-dependencies = [
- "blake3",
- "mycelium-core",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "mycelium-doc"
 version = "0.0.0"
 dependencies = [
@@ -482,16 +424,6 @@ dependencies = [
  "mycelium-workstack",
  "serde",
  "serde_json",
-]
-
-[[package]]
-name = "mycelium-fmt"
-version = "0.0.0"
-dependencies = [
- "mycelium-cli-common",
- "mycelium-l1",
- "mycelium-proj",
- "mycelium-workstack",
 ]
 
 [[package]]
@@ -520,32 +452,6 @@ dependencies = [
  "mycelium-select",
  "mycelium-stack",
  "mycelium-workstack",
-]
-
-[[package]]
-name = "mycelium-lint"
-version = "0.0.0"
-dependencies = [
- "mycelium-cli-common",
- "mycelium-doc",
- "mycelium-l1",
- "mycelium-lsp",
-]
-
-[[package]]
-name = "mycelium-lsp"
-version = "0.0.0"
-dependencies = [
- "blake3",
- "mycelium-cert",
- "mycelium-core",
- "mycelium-interp",
- "mycelium-l1",
- "mycelium-proj",
- "mycelium-select",
- "mycelium-workstack",
- "serde",
- "serde_json",
 ]
 
 [[package]]
@@ -612,13 +518,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "mycelium-sec"
-version = "0.0.0"
-dependencies = [
- "mycelium-cli-common",
-]
-
-[[package]]
 name = "mycelium-select"
 version = "0.0.0"
 dependencies = [
@@ -629,299 +528,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "mycelium-spore"
-version = "0.0.0"
-dependencies = [
- "blake3",
- "mycelium-core",
- "mycelium-proj",
- "proptest",
-]
-
-[[package]]
 name = "mycelium-stack"
 version = "0.0.0"
 dependencies = [
  "stacker",
-]
-
-[[package]]
-name = "mycelium-std-cmp"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
-]
-
-[[package]]
-name = "mycelium-std-collections"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
-]
-
-[[package]]
-name = "mycelium-std-conformance"
-version = "0.0.0"
-dependencies = [
- "mycelium-cert",
- "mycelium-core",
- "mycelium-interp",
- "mycelium-l1",
- "mycelium-mlir",
- "mycelium-std-core",
- "mycelium-std-diag",
- "mycelium-std-error",
- "mycelium-std-recover",
- "mycelium-std-select",
- "mycelium-std-spore",
- "mycelium-std-swap",
- "mycelium-std-ternary",
- "mycelium-std-testing",
-]
-
-[[package]]
-name = "mycelium-std-content"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
-]
-
-[[package]]
-name = "mycelium-std-core"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
-]
-
-[[package]]
-name = "mycelium-std-dense"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-dense",
-]
-
-[[package]]
-name = "mycelium-std-diag"
-version = "0.0.0"
-dependencies = [
- "mycelium-diag",
-]
-
-[[package]]
-name = "mycelium-std-error"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
- "mycelium-std-recover",
-]
-
-[[package]]
-name = "mycelium-std-fmt"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
- "mycelium-std-io",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "mycelium-std-fs"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
-]
-
-[[package]]
-name = "mycelium-std-io"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
- "proptest",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "mycelium-std-iter"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
-]
-
-[[package]]
-name = "mycelium-std-math"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-numerics",
- "mycelium-std-core",
- "mycelium-std-numerics",
-]
-
-[[package]]
-name = "mycelium-std-numerics"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-numerics",
- "mycelium-std-core",
- "serde_json",
-]
-
-[[package]]
-name = "mycelium-std-rand"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
-]
-
-[[package]]
-name = "mycelium-std-recover"
-version = "0.0.0"
-dependencies = [
- "blake3",
- "mycelium-core",
- "mycelium-diag",
- "mycelium-interp",
- "mycelium-std-core",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "mycelium-std-runtime"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-rt-abi",
- "mycelium-sched",
- "mycelium-select",
- "mycelium-std-core",
- "proptest",
-]
-
-[[package]]
-name = "mycelium-std-select"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-select",
-]
-
-[[package]]
-name = "mycelium-std-spore"
-version = "0.0.0"
-dependencies = [
- "blake3",
- "mycelium-core",
- "mycelium-proj",
- "mycelium-spore",
- "mycelium-std-content",
- "mycelium-std-core",
- "mycelium-std-numerics",
- "mycelium-std-vsa",
- "mycelium-vsa",
- "serde_json",
-]
-
-[[package]]
-name = "mycelium-std-swap"
-version = "0.0.0"
-dependencies = [
- "mycelium-cert",
- "mycelium-core",
- "mycelium-numerics",
-]
-
-[[package]]
-name = "mycelium-std-sys"
-version = "0.0.0"
-
-[[package]]
-name = "mycelium-std-sys-host"
-version = "0.0.0"
-dependencies = [
- "mycelium-std-rand",
- "mycelium-std-sys",
- "mycelium-std-time",
-]
-
-[[package]]
-name = "mycelium-std-ternary"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
-]
-
-[[package]]
-name = "mycelium-std-testing"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-diag",
- "mycelium-proj",
- "mycelium-std-core",
-]
-
-[[package]]
-name = "mycelium-std-text"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
-]
-
-[[package]]
-name = "mycelium-std-time"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-std-core",
-]
-
-[[package]]
-name = "mycelium-std-vsa"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-vsa",
-]
-
-[[package]]
-name = "mycelium-tero"
-version = "0.0.0"
-dependencies = [
- "axum",
- "mycelium-doc",
- "mycelium-vsa",
- "serde",
- "serde_json",
- "tokio",
- "tower",
-]
-
-[[package]]
-name = "mycelium-transpile"
-version = "0.0.0"
-dependencies = [
- "mycelium-l1",
- "mycelium-workstack",
- "proc-macro2",
- "proptest",
- "quote",
- "serde",
- "serde_json",
- "syn",
 ]
 
 [[package]]
@@ -931,15 +541,6 @@ dependencies = [
  "mycelium-core",
  "proptest",
  "serde_json",
-]
-
-[[package]]
-name = "mycelium-vsa-decode"
-version = "0.0.0"
-dependencies = [
- "mycelium-core",
- "mycelium-select",
- "mycelium-vsa",
 ]
 
 [[package]]
@@ -1269,6 +870,19 @@ dependencies = [
  "once_cell",
  "rustix",
  "windows-sys",
+]
+
+[[package]]
+name = "tero"
+version = "0.1.2"
+dependencies = [
+ "axum",
+ "mycelium-doc",
+ "mycelium-vsa",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tower",
 ]
 
 [[package]]
