@@ -1,0 +1,21 @@
+name: CI
+
+# Manual only — run the same checks locally via ./scripts/check.sh
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Local-parity checks
+    runs-on: [self-hosted, linux, x64, podman]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: Local-parity checks
+        run: bash scripts/check.sh
