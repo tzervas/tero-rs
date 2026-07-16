@@ -1,7 +1,12 @@
 name: CI
 
-# Manual only — run the same checks locally via ./scripts/check.sh
+# Triggered on push/PR; also manual. Local parity: ./scripts/check.sh
+# Linux x64 jobs: self-hosted Podman fleet.
 on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
   workflow_dispatch:
 
 permissions:
