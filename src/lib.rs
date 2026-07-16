@@ -62,6 +62,9 @@ mod skills;
 mod vsa2;
 mod walk;
 
+#[cfg(feature = "memory")]
+pub mod memory;
+
 pub use emit::{write_json, write_markdown};
 pub use index::build_tero_index;
 pub use load::load_report;

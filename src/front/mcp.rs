@@ -42,6 +42,8 @@ pub(crate) struct McpState {
     tokens: TokenTable,
     layer2_enabled: bool,
     index_path: PathBuf,
+    #[cfg(feature = "memory")]
+    memory: Option<crate::memory::MemoryHandle>,
 }
 
 impl McpState {
@@ -52,12 +54,15 @@ impl McpState {
         tokens: TokenTable,
         layer2_enabled: bool,
         index_path: PathBuf,
+        #[cfg(feature = "memory")] memory: Option<crate::memory::MemoryHandle>,
     ) -> Self {
         McpState {
             report,
             tokens,
             layer2_enabled,
             index_path,
+            #[cfg(feature = "memory")]
+            memory,
         }
     }
 }
@@ -72,12 +77,20 @@ pub fn serve_mcp_stdio(
     tokens: TokenTable,
     layer2_enabled: bool,
     index_path: PathBuf,
+    #[cfg(feature = "memory")] memory: Option<crate::memory::MemoryHandle>,
 ) -> io::Result<()> {
     let stdin = io::stdin();
     let stdout = io::stdout();
     let mut reader = stdin.lock();
     let mut writer = stdout.lock();
-    let mut state = McpState::new(report, tokens, layer2_enabled, index_path);
+    let mut state = McpState::new(
+        report,
+        tokens,
+        layer2_enabled,
+        index_path,
+        #[cfg(feature = "memory")]
+        memory,
+    );
     serve(&mut reader, &mut writer, &mut state)
 }
 
@@ -233,10 +246,64 @@ fn dispatch(state: &mut McpState, name: &str, args: &Value) -> Result<Value, Fro
             View::Explain,
         ),
         "refresh" => refresh(state),
+        #[cfg(feature = "memory")]
+        "memory_store" => memory_store(state, args),
+        #[cfg(feature = "memory")]
+        "memory_retrieve" => memory_retrieve(state, args),
+        #[cfg(feature = "memory")]
+        "memory_consolidate" => memory_consolidate(state),
         other => Err(FrontError::BadRequest(format!(
             "unknown tool {other:?} (see tools/list)"
         ))),
     }
+}
+
+#[cfg(feature = "memory")]
+fn memory_store(state: &McpState, args: &Value) -> Result<Value, FrontError> {
+    let Some(handle) = state.memory.as_ref() else {
+        return Ok(crate::memory::envelope_memory_disabled());
+    };
+    let content = args
+        .get("content")
+        .and_then(Value::as_str)
+        .ok_or_else(|| FrontError::BadRequest("memory_store requires string `content`".into()))?;
+    let anchors = args.get("anchors").and_then(Value::as_str);
+    let importance = args
+        .get("importance")
+        .and_then(Value::as_f64)
+        .map(|f| f as f32);
+    let index_meta = state.index_path.display().to_string();
+    let id = handle
+        .store(content, anchors, importance, Some(index_meta.as_str()))
+        .map_err(FrontError::Internal)?;
+    Ok(crate::memory::envelope_stored(&id))
+}
+
+#[cfg(feature = "memory")]
+fn memory_retrieve(state: &McpState, args: &Value) -> Result<Value, FrontError> {
+    let Some(handle) = state.memory.as_ref() else {
+        return Ok(crate::memory::envelope_memory_disabled());
+    };
+    let query = args
+        .get("query")
+        .and_then(Value::as_str)
+        .ok_or_else(|| FrontError::BadRequest("memory_retrieve requires string `query`".into()))?;
+    let k = args.get("k").and_then(|v| v.as_u64()).map(|n| n as usize);
+    let hits = handle
+        .retrieve(query, k)
+        .map_err(FrontError::Internal)?;
+    Ok(crate::memory::envelope_hits(&hits))
+}
+
+#[cfg(feature = "memory")]
+fn memory_consolidate(state: &McpState) -> Result<Value, FrontError> {
+    let Some(handle) = state.memory.as_ref() else {
+        return Ok(crate::memory::envelope_memory_disabled());
+    };
+    let stats = handle
+        .consolidate_once()
+        .map_err(FrontError::Internal)?;
+    Ok(crate::memory::envelope_consolidated(&stats))
 }
 
 /// Parse + run a query, returning the [`View`]'s envelope (identical to the HTTP front's).
@@ -288,7 +355,7 @@ fn finish_call(id: Value, outcome: Result<Value, FrontError>) -> Value {
 pub fn tool_descriptors() -> Value {
     // `token` is required on every tool (the per-call bearer). Query tools add their own args.
     let tok = json!({ "type": "string", "description": "bearer token (from TERO_TOKENS)" });
-    json!([
+    let base = json!([
         tool(
             "identify",
             "Server identity, version, and whether the Layer-2 gate is open.",
@@ -357,7 +424,49 @@ pub fn tool_descriptors() -> Value {
             &["token"],
             "maintenance"
         ),
-    ])
+    ]);
+    #[cfg(feature = "memory")]
+    {
+        let memory_tools = json!([
+            tool(
+                "memory_store",
+                "Persist learned content via memory-gate (requires `memory-write`; runtime: TERO_MEMORY_ENABLED + TERO_MEMORY_DB).",
+                json!({
+                    "content": { "type": "string", "description": "text to store" },
+                    "anchors": { "type": "string", "description": "optional comma-separated L1 anchors (metadata only)" },
+                    "importance": { "type": "number", "description": "optional importance in [0,1]" },
+                    "token": tok
+                }),
+                &["content", "token"],
+                "memory"
+            ),
+            tool(
+                "memory_retrieve",
+                "Dense memory retrieval (memory_hits envelope — not L1 citations; requires `memory-read`).",
+                json!({
+                    "query": { "type": "string", "description": "retrieval query" },
+                    "k": { "type": "integer", "description": "max hits (optional)" },
+                    "token": tok
+                }),
+                &["query", "token"],
+                "memory"
+            ),
+            tool(
+                "memory_consolidate",
+                "Run memory-gate consolidation once (requires `memory-write`).",
+                json!({ "token": tok }),
+                &["token"],
+                "memory"
+            ),
+        ]);
+        let mut all = base.as_array().cloned().unwrap_or_default();
+        all.extend(memory_tools.as_array().cloned().unwrap_or_default());
+        json!(all)
+    }
+    #[cfg(not(feature = "memory"))]
+    {
+        base
+    }
 }
 
 /// One tool descriptor.

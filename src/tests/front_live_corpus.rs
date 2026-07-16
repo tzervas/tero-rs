@@ -117,7 +117,14 @@ async fn fronts_over_the_real_committed_corpus_agree_and_resolve_to_real_files()
         false,
         index_path.clone(),
     ));
-    let mut mcp = McpState::new(report.clone(), toks(), false, index_path.clone());
+    let mut mcp = McpState::new(
+        report.clone(),
+        toks(),
+        false,
+        index_path.clone(),
+        #[cfg(feature = "memory")]
+        None,
+    );
 
     for (family, kind) in cases {
         let uri = format!("/v1/query?kind=kind&value={kind}");

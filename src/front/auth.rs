@@ -6,7 +6,10 @@
 //!   (the gitleaks gate covers generated artifacts too); this module deliberately has no `Display`
 //!   that prints a token.
 //! - **Read-only by default** — the `read` scope covers query/cite/explain/identify; the broader
-//!   `refresh` scope additionally permits reloading the index. `refresh ⊇ read`.
+//!   `refresh` scope additionally permits reloading the index. `refresh ⊇ read` for Layer-1 only.
+//! - **Memory scopes** (`memory-read`, `memory-write`) are orthogonal to L1: `memory-write ⊇
+//!   memory-read` for memory tools; neither memory scope permits `refresh`, and `read`/`refresh` do
+//!   not permit memory tools.
 //! - **Refuse to start without tokens** — [`TokenTable::from_env`] returns an error (not an empty,
 //!   accidentally-open table) when no tokens are configured; the binaries surface it on stderr and
 //!   exit non-zero. There is no anonymous default in v0 (YAGNI + footgun avoidance).
@@ -29,29 +32,32 @@ pub enum Scope {
     Read,
     /// Read **plus** `refresh` (reload the served index from disk).
     Refresh,
+    /// Memory retrieval (`memory_retrieve`).
+    MemoryRead,
+    /// Memory store + consolidate (`memory_store`, `memory_consolidate`).
+    MemoryWrite,
 }
 
 impl Scope {
-    /// Privilege rank — higher permits more. `Refresh` (1) ⊇ `Read` (0).
-    fn rank(self) -> u8 {
-        match self {
-            Scope::Read => 0,
-            Scope::Refresh => 1,
-        }
-    }
-
     /// Whether a token of `self` scope may perform an operation requiring `required` scope.
     #[must_use]
     pub fn allows(self, required: Scope) -> bool {
-        self.rank() >= required.rank()
+        match required {
+            Scope::Read => matches!(self, Scope::Read | Scope::Refresh),
+            Scope::Refresh => matches!(self, Scope::Refresh),
+            Scope::MemoryRead => matches!(self, Scope::MemoryRead | Scope::MemoryWrite),
+            Scope::MemoryWrite => matches!(self, Scope::MemoryWrite),
+        }
     }
 
-    /// The wire keyword (`read` / `refresh`).
+    /// The wire keyword (`read` / `refresh` / `memory-read` / `memory-write`).
     #[must_use]
     pub fn as_str(self) -> &'static str {
         match self {
             Scope::Read => "read",
             Scope::Refresh => "refresh",
+            Scope::MemoryRead => "memory-read",
+            Scope::MemoryWrite => "memory-write",
         }
     }
 
@@ -61,6 +67,8 @@ impl Scope {
         match s {
             "read" => Some(Scope::Read),
             "refresh" => Some(Scope::Refresh),
+            "memory-read" => Some(Scope::MemoryRead),
+            "memory-write" => Some(Scope::MemoryWrite),
             _ => None,
         }
     }
@@ -173,7 +181,8 @@ impl TokenTable {
             }
             let scope = Scope::parse(scope).ok_or_else(|| {
                 TokenTableError::Malformed(format!(
-                    "unknown scope {scope:?} in entry {entry:?} (expected `read` or `refresh`)"
+                    "unknown scope {scope:?} in entry {entry:?} (expected `read`, `refresh`, \
+                     `memory-read`, or `memory-write`)"
                 ))
             })?;
             tokens.insert(tok.to_owned(), scope);

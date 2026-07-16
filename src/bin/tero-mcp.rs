@@ -6,6 +6,7 @@
 //! ```text
 //!   TERO_TOKENS='s3cr3t:read admin:refresh' tero-mcp [--index docs/tero-index/index.json]
 //! ```
+//! With `--features memory`: optional `TERO_MEMORY_ENABLED=1`, `TERO_MEMORY_DB`, `TERO_MEMORY_MODEL`.
 //!
 //! The server **refuses to start** with no tokens configured. Exit codes: `0` ok · `64` usage ·
 //! `66` I/O · `78` config (no tokens). Never-silent (G2): failures are explicit stderr messages.
@@ -72,12 +73,37 @@ fn run(args: &[String]) -> Result<u8, (u8, String)> {
     let report =
         load_report(&index).map_err(|e| (EX_IO, format!("loading {}: {e}", index.display())))?;
 
-    serve_mcp_stdio(report, tokens, false, index)
-        .map_err(|e| (EX_IO, format!("mcp stdio: {e}")))?;
+    #[cfg(feature = "memory")]
+    let memory = {
+        use tero::memory::MemoryHandle;
+        MemoryHandle::try_open_from_env().map_err(|e| (EX_CONFIG, e.to_string()))?
+    };
+
+    serve_mcp_stdio(
+        report,
+        tokens,
+        false,
+        index,
+        #[cfg(feature = "memory")]
+        memory,
+    )
+    .map_err(|e| (EX_IO, format!("mcp stdio: {e}")))?;
     Ok(EX_OK)
 }
 
 fn usage() -> String {
-    "usage: TERO_TOKENS='<token>:<read|refresh> ...' tero-mcp [--index <index.json>] [--describe]"
-        .to_owned()
+    #[cfg(not(feature = "memory"))]
+    {
+        "usage: TERO_TOKENS='<token>:<scope> ...' tero-mcp [--index <index.json>] [--describe]\n\
+         scopes: read | refresh | memory-read | memory-write"
+            .to_owned()
+    }
+    #[cfg(feature = "memory")]
+    {
+        "usage: TERO_TOKENS='<token>:<scope> ...' tero-mcp [--index <index.json>] [--describe]\n\
+         scopes: read | refresh | memory-read | memory-write\n\
+         optional memory (memory-gate-rs): TERO_MEMORY_ENABLED=1 TERO_MEMORY_DB=<sqlite-path> \
+         [TERO_MEMORY_MODEL=bge-small-en-v1.5]"
+            .to_owned()
+    }
 }

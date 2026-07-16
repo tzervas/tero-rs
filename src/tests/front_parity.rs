@@ -57,7 +57,14 @@ async fn engine_http_and_mcp_agree_on_every_answer_and_refusal() {
         false,
         PathBuf::from("unused"),
     ));
-    let mut mcp = McpState::new(report.clone(), toks(), false, PathBuf::from("unused"));
+    let mut mcp = McpState::new(
+        report.clone(),
+        toks(),
+        false,
+        PathBuf::from("unused"),
+        #[cfg(feature = "memory")]
+        None,
+    );
 
     // (engine query, HTTP uri, MCP tool, MCP args) — the last case is a refusal (unknown id).
     let cases: Vec<(Query, &str, &str, Value)> = vec![

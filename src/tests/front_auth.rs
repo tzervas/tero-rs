@@ -58,6 +58,30 @@ fn scope_lattice_refresh_is_a_superset_of_read() {
 }
 
 #[test]
+fn parse_accepts_memory_scopes() {
+    let t = TokenTable::parse("mread:memory-read mwrite:memory-write").unwrap();
+    assert_eq!(t.len(), 2);
+    assert_eq!(
+        t.authorize(Some("mread"), Scope::MemoryRead).unwrap(),
+        Scope::MemoryRead
+    );
+    assert_eq!(
+        t.authorize(Some("mwrite"), Scope::MemoryWrite).unwrap(),
+        Scope::MemoryWrite
+    );
+}
+
+#[test]
+fn memory_scope_lattice_is_orthogonal_to_l1() {
+    assert!(Scope::MemoryWrite.allows(Scope::MemoryRead));
+    assert!(!Scope::MemoryRead.allows(Scope::MemoryWrite));
+    assert!(!Scope::Read.allows(Scope::MemoryRead));
+    assert!(!Scope::Refresh.allows(Scope::MemoryWrite));
+    assert!(!Scope::MemoryRead.allows(Scope::Refresh));
+    assert!(!Scope::MemoryWrite.allows(Scope::Refresh));
+}
+
+#[test]
 fn authorize_distinguishes_missing_invalid_and_insufficient() {
     let t = TokenTable::parse("reader:read admin:refresh").unwrap();
     // Missing token.
