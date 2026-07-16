@@ -289,9 +289,7 @@ fn memory_retrieve(state: &McpState, args: &Value) -> Result<Value, FrontError> 
         .and_then(Value::as_str)
         .ok_or_else(|| FrontError::BadRequest("memory_retrieve requires string `query`".into()))?;
     let k = args.get("k").and_then(|v| v.as_u64()).map(|n| n as usize);
-    let hits = handle
-        .retrieve(query, k)
-        .map_err(FrontError::Internal)?;
+    let hits = handle.retrieve(query, k).map_err(FrontError::Internal)?;
     Ok(crate::memory::envelope_hits(&hits))
 }
 
@@ -300,9 +298,7 @@ fn memory_consolidate(state: &McpState) -> Result<Value, FrontError> {
     let Some(handle) = state.memory.as_ref() else {
         return Ok(crate::memory::envelope_memory_disabled());
     };
-    let stats = handle
-        .consolidate_once()
-        .map_err(FrontError::Internal)?;
+    let stats = handle.consolidate_once().map_err(FrontError::Internal)?;
     Ok(crate::memory::envelope_consolidated(&stats))
 }
 

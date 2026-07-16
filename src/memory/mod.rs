@@ -8,6 +8,6 @@ mod handle;
 
 #[cfg(feature = "memory")]
 pub use handle::{
-    envelope_consolidated, envelope_hits, envelope_memory_disabled, envelope_stored,
-    MemoryHandle, MemoryOpenError,
+    envelope_consolidated, envelope_hits, envelope_memory_disabled, envelope_stored, MemoryHandle,
+    MemoryOpenError,
 };
