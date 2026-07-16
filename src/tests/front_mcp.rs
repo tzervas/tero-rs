@@ -34,7 +34,14 @@ fn drive(state: &mut McpState, requests: &[Value]) -> Vec<Value> {
 fn state(tag: &str) -> McpState {
     let (_root, report) = corpus_report(tag);
     let tokens = TokenTable::parse("reader:read admin:refresh").unwrap();
-    McpState::new(report, tokens, false, PathBuf::from("unused/index.json"))
+    McpState::new(
+        report,
+        tokens,
+        false,
+        PathBuf::from("unused/index.json"),
+        #[cfg(feature = "memory")]
+        None,
+    )
 }
 
 #[test]
@@ -59,7 +66,8 @@ fn tools_list_returns_the_nine_descriptors() {
         &[json!({ "jsonrpc": "2.0", "id": 2, "method": "tools/list" })],
     );
     let tools = out[0]["result"]["tools"].as_array().unwrap();
-    assert_eq!(tools.len(), 9);
+    let expected_len = if cfg!(feature = "memory") { 12 } else { 9 };
+    assert_eq!(tools.len(), expected_len);
     let names: Vec<&str> = tools.iter().map(|t| t["name"].as_str().unwrap()).collect();
     for expected in [
         "identify",
@@ -149,7 +157,14 @@ fn refresh_reloads_the_index_with_a_refresh_scoped_token() {
     let (root, report) = corpus_report("mcp-refresh");
     let index_path = emit_index(&root, &report);
     let tokens = TokenTable::parse("admin:refresh").unwrap();
-    let mut st = McpState::new(report, tokens, false, index_path);
+    let mut st = McpState::new(
+        report,
+        tokens,
+        false,
+        index_path,
+        #[cfg(feature = "memory")]
+        None,
+    );
     let out = drive(
         &mut st,
         &[json!({ "jsonrpc": "2.0", "id": 8, "method": "tools/call",

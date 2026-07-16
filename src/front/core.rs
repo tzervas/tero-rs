@@ -111,6 +111,8 @@ impl FrontError {
 pub(crate) fn required_scope(op: &str) -> Scope {
     match op {
         "refresh" => Scope::Refresh,
+        "memory_store" | "memory_consolidate" => Scope::MemoryWrite,
+        "memory_retrieve" => Scope::MemoryRead,
         _ => Scope::Read,
     }
 }
@@ -196,6 +198,39 @@ fn refusal_envelope(refusal: &Refusal) -> Value {
 /// The `identify` payload — the fronts' capability/version handshake. Uses [`crate::crate_summary`]
 /// and surfaces `layer2_enabled` (the M-1018 gate; `false` until the eval gate opens — DN-87 §6.1)
 /// and the sibling indices, so a client learns the whole memory surface in one call.
+#[cfg(not(feature = "memory"))]
+fn core_identify_operations() -> Value {
+    json!([
+        "identify",
+        "query_by_id",
+        "query_by_status",
+        "query_by_kind",
+        "cross_ref",
+        "text_search",
+        "cite",
+        "explain",
+        "refresh",
+    ])
+}
+
+#[cfg(feature = "memory")]
+fn core_identify_operations() -> Value {
+    json!([
+        "identify",
+        "query_by_id",
+        "query_by_status",
+        "query_by_kind",
+        "cross_ref",
+        "text_search",
+        "cite",
+        "explain",
+        "refresh",
+        "memory_store",
+        "memory_retrieve",
+        "memory_consolidate",
+    ])
+}
+
 pub(crate) fn identify_value(layer2_enabled: bool) -> Value {
     json!({
         "name": "tero",
@@ -203,10 +238,7 @@ pub(crate) fn identify_value(layer2_enabled: bool) -> Value {
         "version": env!("CARGO_PKG_VERSION"),
         "engine": "M-1016 QueryEngine over the Layer-1 tero-index (docs/tero-index/index.json)",
         "layer2_enabled": layer2_enabled,
-        "operations": [
-            "identify", "query_by_id", "query_by_status", "query_by_kind",
-            "cross_ref", "text_search", "cite", "explain", "refresh",
-        ],
+        "operations": core_identify_operations(),
         "siblings": SIBLING_INDICES,
     })
 }

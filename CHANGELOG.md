@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Optional **`memory` Cargo feature**: MCP tools `memory_store`, `memory_retrieve`, `memory_consolidate` backed by memory-gate-rs (`join/tero-memory-feature`). Scopes `memory-read` / `memory-write`; runtime gated by `TERO_MEMORY_ENABLED` + `TERO_MEMORY_DB`.
+
 ## [0.2.0] — 2026-07-16 (standalone cut)
 
 ### Removed
