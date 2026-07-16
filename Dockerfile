@@ -5,19 +5,12 @@
 # WHAT: two-stage build — a `rust` builder compiles the workspace in release mode, then only the
 # four built binaries are copied into a slim Debian runtime image (no toolchain/source in the
 # shipped image).
-# WHY: the workspace pins rust-version = "1.96.1" (Cargo.toml [workspace.package]) as its MSRV;
-# the `rust:1` tag tracks current stable, which satisfies that floor. No crate in tero's
-# own dependency graph (mycelium-core/mycelium-l1/mycelium-doc/mycelium-vsa) uses a nightly
-# `#![feature(...)]` gate (verified: grep for `feature(` across those crates found none), so a
-# stable-toolchain image builds it cleanly.
-# WHY NOT distroless/scratch: the runtime binaries are plain dynamically-linked glibc executables
-# (not statically linked musl); debian-slim keeps libc present with a small footprint rather than
-# adding a musl target cross-compile step this pass.
+# Single-package `tero` at repo root (no mycelium workspace members).
 
 FROM rust:1-bookworm AS builder
 WORKDIR /build
 COPY . .
-RUN cargo build --release -p tero
+RUN cargo build --release
 
 FROM debian:bookworm-slim AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
