@@ -1,5 +1,10 @@
 # tero-rs
 
+<!-- FLEET-BADGES:BEGIN -->
+[![CI](https://github.com/tzervas/tero-rs/actions/workflows/fleet-ci.yml/badge.svg?branch=main)](https://github.com/tzervas/tero-rs/actions/workflows/fleet-ci.yml?query=branch%3Amain)
+[![Security](https://github.com/tzervas/tero-rs/actions/workflows/fleet-security.yml/badge.svg?branch=main)](https://github.com/tzervas/tero-rs/actions/workflows/fleet-security.yml?query=branch%3Amain)
+<!-- FLEET-BADGES:END -->
+
 **Status:** Extracted toolchain core (2026-07-10)
 
 The Rust kernel and binary fronts for Tero (Layer-1 index + query engine, DN-87; M-1016/M-1017).
