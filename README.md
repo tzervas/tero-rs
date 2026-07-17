@@ -1,5 +1,10 @@
 # tero-rs
 
+<!-- FLEET-BADGES:BEGIN -->
+[![CI](https://github.com/tzervas/tero-rs/actions/workflows/fleet-ci.yml/badge.svg?branch=main)](https://github.com/tzervas/tero-rs/actions/workflows/fleet-ci.yml?query=branch%3Amain)
+[![Security](https://github.com/tzervas/tero-rs/actions/workflows/fleet-security.yml/badge.svg?branch=main)](https://github.com/tzervas/tero-rs/actions/workflows/fleet-security.yml?query=branch%3Amain)
+<!-- FLEET-BADGES:END -->
+
 Standalone **Tero** engine: Layer-1 deterministic corpus index + optional Layer-2 VSA retrieval, served over MCP (`tero-mcp`) and HTTP (`tero-http`).
 
 Named for Atsushi Tero’s slime-mold network experiments — route queries to the citations that answer them.
