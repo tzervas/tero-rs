@@ -9,11 +9,17 @@ Standalone **Tero** engine: Layer-1 deterministic corpus index + optional Layer-
 
 Named for Atsushi Tero’s slime-mold network experiments — route queries to the citations that answer them.
 
+### What ships vs. what's gated
+
+- **Serving now:** Layer-1 (deterministic, provenance-mandatory citation index + query engine).
+- **Layer-2 (VSA semantic retrieval) is implemented but gated CLOSED** (`layer2_enabled = false`) — see [`eval/VERDICT.md`](eval/VERDICT.md). The gate opens only on a measured win over Layer-1 (correctness + latency within band, provenance fidelity 1.0); the "improved-on-RAG" claim stays an unopened hypothesis, not a shipped capability.
+- **Optional `memory` feature** (below) is a separate, orthogonal MCP surface — not Layer-2, not RAG.
+
 ## Layout
 
 ```text
 tero-rs/
-  Cargo.toml          # single package `tero` (v0.2.0)
+  Cargo.toml          # single package `tero` (v0.2.1)
   src/                # library + bins under src/bin/
   src/md/             # markdown corpus ingest (in-tree; not mycelium)
   src/vsa2/           # Layer-2 VSA algebra (in-tree MAP-I + cleanup)
