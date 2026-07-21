@@ -1,7 +1,7 @@
 # tero-rs — standalone (no mycelium language crates).
 [package]
 name = "tero"
-version = "0.2.0"
+version = "0.2.1"
 description = "tero — transparent memory substrate & agent knowledge API: deterministic Layer-1 corpus index + optional Layer-2 VSA retrieval, MCP and HTTP fronts"
 edition = "2021"
 rust-version = "1.85.0"
